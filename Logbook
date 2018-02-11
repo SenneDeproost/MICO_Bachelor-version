@@ -1,0 +1,6 @@
+* python-dev is needed for installation of OpenMDAO.
+* python-tk is needed for FLORISSE.
+* Floats in Analytic_components.py (FLORIS_SE) must me integers (see LINE 434: 1. -> 1).
+* Updates and packages, like pyparsing, need to be local installed on the virtual machine of OpenMDAO.
+* Setup.py of AirfoilPreppy (see LINE 14: package_data: {'airfoilprep': []} -> package_data={'airfoilprep': []})
+

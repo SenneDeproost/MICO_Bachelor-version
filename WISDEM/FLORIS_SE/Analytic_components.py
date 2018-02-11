@@ -431,7 +431,7 @@ class dist_const(Component):
                                     desc='y coordinates of turbines in wind dir. ref. frame'))
 
         # Explicitly size output array
-        self.add('separation', Array(np.zeros((nTurbines-1.)*nTurbines/2.), iotype='out', dtype='float', \
+        self.add('separation', Array(np.zeros ((nTurbines-1)*nTurbines/2), iotype='out', dtype='float', \
                                         desc='spacing of all turbines in the wind farm'))
 
     def execute(self):
@@ -441,7 +441,7 @@ class dist_const(Component):
         turbineX = self.turbineX
         turbineY = self.turbineY
         nTurbines = turbineX.size
-        separation = np.zeros((nTurbines-1.)*nTurbines/2.)
+        separation = np.zeros((nTurbines-1)*nTurbines/2)
 
         k = 0
         for i in range(0, nTurbines):
@@ -460,7 +460,7 @@ class dist_const(Component):
         turbineX = self.turbineX
         turbineY = self.turbineY
         nTurbines = turbineX.size
-        J = np.zeros(((nTurbines-1.)*nTurbines/2., 2*nTurbines))
+        J = np.zeros(((nTurbines-1)*nTurbines/2, 2*nTurbines))
 	
         k = 0
         for i in range(0, nTurbines):

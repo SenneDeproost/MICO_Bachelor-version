@@ -17,7 +17,8 @@ import numpy as np
 from math import pi
 from os import path
 
-from ccblade import CCAirfoil, CCBlade
+from ccblade import CCAirfoil
+import ccblade as CCBlade
 
 
 class TestGradients(unittest.TestCase):
@@ -1608,7 +1609,7 @@ class TestGradientsNotRotating(unittest.TestCase):
         self.nSector = 8
 
         # create CCBlade object
-        self.rotor = CCBlade(self.r, self.chord, self.theta, self.af, self.Rhub, self.Rtip,
+        self.rotor = CCBlade.CCBlade(self.r, self.chord, self.theta, self.af, self.Rhub, self.Rtip,
             self.B, self.rho, self.mu, self.precone, self.tilt, self.yaw, self.shearExp,
             self.hubHt, self.nSector, derivatives=True)
 

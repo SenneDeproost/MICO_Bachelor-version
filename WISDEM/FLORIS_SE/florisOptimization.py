@@ -1,3 +1,4 @@
+import pyparsing
 from matplotlib import pyplot as plt
 import cPickle as pickle
 import numpy as np
