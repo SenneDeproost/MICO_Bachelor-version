@@ -1,0 +1,26 @@
+[
+  {
+    "model": "NREL 5MW",
+    "location":
+    {
+      "x": 0,
+      "y": 0
+    }
+  },
+  {
+    "model": "NREL 5MW",
+    "location":
+    {
+      "x": 5,
+      "y": 5
+    }
+  },
+  {
+    "model": "NREL 5MW",
+    "location":
+    {
+      "x": 10,
+      "y": 10
+    }
+  }
+]
