@@ -12,7 +12,7 @@ def printBanner():
 
 def printHelp():
     printBanner()
-    print("prompt, -p                  Start in prompt mode.")
+    print("shell, -s                   Start in shell mode.")
     print("help, -h                    Open program help.")
     print("run, -r                     Run program with file.")
 
@@ -31,9 +31,9 @@ def evalShell(input):
     if input[0] in ["exit"]:
         exit()
     elif input[0] in ["loadconfig"]:
-        print 'dummy'
+        print('dummy')
     elif input[0] in ["optimize"]:
-        print 'dummy'
+        print('dummy')
     else:
         print("ERROR: ")
         print(input)

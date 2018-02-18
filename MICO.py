@@ -14,13 +14,13 @@ args = sys.argv
 argc = len(args)
 
 def runFromFile(filename):
-    print filename
+    print(filename)
 
 if argc >> 1:
     first_arg = args[1]
     other_args = args[2:]
 
-    if first_arg in ["prompt", "-p"]:
+    if first_arg in ["shell", "-s"]:
         runShell()
     elif first_arg in ["help", "-h"]:
         printHelp()
