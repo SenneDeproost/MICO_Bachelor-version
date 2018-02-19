@@ -1,0 +1,26 @@
+{
+  "modes":
+  {
+    "shell":
+            [
+              "shell",
+              "-s"
+            ],
+    "run":
+            [
+              "run",
+              "-r"
+            ],
+    "help":
+            [
+              "help",
+              "-h"
+            ]
+
+  },
+  "commands":
+          [
+            "exit",
+            "print"
+          ]
+}
