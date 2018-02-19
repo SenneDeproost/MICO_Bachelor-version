@@ -5,7 +5,7 @@
 # ***************************************************************************** #
 
 import sys
-import globals
+import globals as g
 from shell import *
 
 
