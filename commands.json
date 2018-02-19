@@ -16,8 +16,8 @@
       "flags": ["help", "-h"],
       "instruction": "Open program help."
     }
-  ]
-  },
+  ],
+
   "commands":
       [
         {
