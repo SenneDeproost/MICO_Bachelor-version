@@ -1,6 +1,6 @@
 from globals import *
 
-SHELL_LOOP = True
+SHELL_LOOP = False
 PROMPT = '>'
 
 def printBanner():
@@ -11,15 +11,30 @@ def printBanner():
     print("")
 
 def printHelp():
+    if SHELL_LOOP:
+        printShellHelp()
+    else:
+        printModeHelp()
+
+def printModeHelp():
     printBanner()
+    modes = commands["modes"]
+
+
+
     print("shell, -s                   Start in shell mode.")
     print("help, -h                    Open program help.")
     print("run, -r                     Run program with file.")
+
+def printShellHelp():
+    printBanner()
 
 def toArray(string):
     return string.split(" ")
 
 def runShell():
+    SHELL_LOOP = True
+    printBanner()
     count = 0
     while SHELL_LOOP:
         count += 1

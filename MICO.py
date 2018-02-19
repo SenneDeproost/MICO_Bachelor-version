@@ -5,8 +5,10 @@
 # ***************************************************************************** #
 
 import sys
-
+import globals
 from shell import *
+
+
 #import "infrastructure.py"
 #import "dependency_graph.py"
 
