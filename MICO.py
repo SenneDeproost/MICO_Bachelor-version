@@ -15,20 +15,16 @@ from shell import *
 args = sys.argv
 argc = len(args)
 
-def runFromFile(filename):
-    print(filename)
-
 if argc >> 1:
     first_arg = args[1]
     other_args = args[2:]
 
-    if first_arg in ["shell", "-s"]:
-        runShell()
-    elif first_arg in ["help", "-h"]:
-        printHelp()
-    elif first_arg in ["run", "-r"]:
-        runFromFile(other_args)
-    else:
-        printHelp()
-else:
-    printHelp()
+    modeObjects = g.commands["modes"]
+    idx = 0
+    for object in modeObjects:
+        if first_arg in str(modeObjects[idx]["flags"]):
+            exec("%s" % (modeObjects[idx]["procedure"]))
+        idx += 1
+
+def runFromFile(filename):
+    print(filename)
