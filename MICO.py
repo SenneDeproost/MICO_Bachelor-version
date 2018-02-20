@@ -19,12 +19,15 @@ if argc >> 1:
     first_arg = args[1]
     other_args = args[2:]
 
-    modeObjects = g.commands["modes"]
+    modes = g.commands["modes"]
     idx = 0
-    for object in modeObjects:
-        if first_arg in str(modeObjects[idx]["flags"]):
-            exec("%s" % (modeObjects[idx]["procedure"]))
+    for obj in modes:
+        flags = modes[idx]["flags"]
+        if first_arg in flags:
+            exec("%s" % (modes[idx]["procedure"]))
         idx += 1
+else:
+    printHelp()
 
 def runFromFile(filename):
     print(filename)

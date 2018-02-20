@@ -2,9 +2,9 @@
   "modes":
   [
     {
-      "name": "help",
-      "procedure": "printHelp()",
-      "flags": ["shell, -s"],
+      "name": "shell",
+      "procedure": "runShell()",
+      "flags": ["shell", "-s"],
       "instruction": "Start in Shell mode."
     },
     {

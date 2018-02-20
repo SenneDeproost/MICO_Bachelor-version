@@ -1,4 +1,4 @@
-from globals import *
+import globals as g
 
 SHELL_LOOP = False
 PROMPT = '>'
@@ -6,7 +6,7 @@ PROMPT = '>'
 def printBanner():
     print("------------------------------------")
     print("-               MICO               -")
-    print("-           VERSION  " + str(VERSION_NUMBER) + "           -")
+    print("-           VERSION  " + str(g.VERSION_NUMBER) + "           -")
     print("------------------------------------")
     print("")
 
@@ -18,7 +18,8 @@ def printHelp():
 
 def printModeHelp():
     printBanner()
-    modes = commands["modes"]
+#    modes = commands["modes"]
+
 
 
 
