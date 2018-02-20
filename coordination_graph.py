@@ -1,6 +1,6 @@
 import networkx as nx
 
-def createDependencyGraph(database, dependencyRules):
+def createCoordinationGraph(database, dependencyRules):
     cg = nx.Graph()
 
 

@@ -3,19 +3,19 @@
   [
     {
       "name": "shell",
-      "procedure": "runShell()",
+      "procedure": "runShell",
       "flags": ["shell", "-s"],
       "instruction": "Start in Shell mode."
     },
     {
       "name": "run",
-      "procedure": "runFromFile()",
+      "procedure": "runFromFile",
       "flags": ["run", "-r"],
       "instruction": "Run program with file."
     },
     {
       "name": "help",
-      "procedure": "printHelp()",
+      "procedure": "printHelp",
       "flags": ["help", "-h"],
       "instruction": "Open program help."
     }
