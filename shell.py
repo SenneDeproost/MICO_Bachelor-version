@@ -18,14 +18,12 @@ def printHelp():
 
 def printModeHelp():
     printBanner()
-#    modes = commands["modes"]
+    modes = g.commands["modes"]
 
+    for mode in modes:
+        flags = mode["flags"]
+        print("%s                   %s" % (flags, mode["instruction"]))
 
-
-
-    print("shell, -s                   Start in shell mode.")
-    print("help, -h                    Open program help.")
-    print("run, -r                     Run program with file.")
 
 def printShellHelp():
     printBanner()
