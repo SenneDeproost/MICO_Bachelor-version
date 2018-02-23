@@ -70,3 +70,10 @@ def do_version():
 
 def do_exit():
     exit()
+
+t = 1
+
+def do_set(variable, typ, value):
+    data = exec("%s(%s)" % (typ, value))
+    global variable
+    variable = data
