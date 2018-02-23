@@ -21,11 +21,10 @@
     }
   ],
 
-  "commands":
-      [
-        {
-          "name": "help",
-          "instruction": "Display possible Shell commands."
-        }
-      ]
+  "shell":
+  {
+    "exit": "Exit the shell.",
+    "help": "Print possible commands.",
+    "version": "Print software version"
+  }
 }

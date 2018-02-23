@@ -42,13 +42,31 @@ def runShell():
         evalShell(shellInput)
 
 def evalShell(input):
-    if input[0] in ["exit"]:
-        exit()
-    elif input[0] in ["loadconfig"]:
-        print('dummy')
-    elif input[0] in ["optimize"]:
-        print('dummy')
+    command = input[0]
+    possible_commands = g.commands["shell"]
+    args = input[1:]
+    number_of_args = len(args)
+
+    if command[0] == '!':
+        command_string = command[1:] + "(*args)"
+        exec("%s" % command_string)
+
+    elif command in possible_commands:
+        command_string = "do_" + command + "(*args)"
+	exec("%s" % command_string)
+
     else:
-        print("ERROR: ")
-        print(input)
-        print("IS NOT A VALID COMMAND.")
+        print("ERROR, %s is an invalid command." % command)
+
+
+def add(a, b):
+    print a + b
+
+def do_help():
+    print "haha"
+
+def do_version():
+    print(g.VERSION_NUMBER)
+
+def do_exit():
+    exit()
