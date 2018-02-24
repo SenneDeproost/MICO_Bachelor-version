@@ -6,7 +6,7 @@ PROMPT = '>'
 def printBanner():
     print("------------------------------------")
     print("-               MICO               -")
-    print("-           VERSION  " + str(g.VERSION_NUMBER) + "           -")
+    print("-           VERSION  " + str(g.global_vars["VERSION_NUMBER"]) + "           -")
     print("------------------------------------")
     print("")
 
@@ -66,14 +66,18 @@ def do_help():
     print "haha"
 
 def do_version():
-    print(g.VERSION_NUMBER)
+    print(g.global_vars["VERSION_NUMBER"])
 
 def do_exit():
     exit()
 
-t = 1
 
-def do_set(variable, typ, value):
-    data = exec("%s(%s)" % (typ, value))
-    global variable
-    variable = data
+def do_setGlobal(name, type, value):
+    data = None
+    if type == "string":
+        data = str(value)
+    elif type == "float":
+        data == float(value)
+    else: print("ERROR, UNKNOWN TYPE IN setGlobal.")
+
+    g.global_vars[name] = data

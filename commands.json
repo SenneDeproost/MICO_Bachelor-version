@@ -26,6 +26,6 @@
     "exit": "Exit the shell.",
     "help": "Print possible commands.",
     "version": "Print software version",
-    "set": "Assign value to variable."
+    "setGlobal": "Assign value to global variable."
   }
 }
