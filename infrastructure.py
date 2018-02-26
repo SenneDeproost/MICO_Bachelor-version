@@ -1,10 +1,15 @@
 from tinydb import *
+from matplotlib import pyplot as plt
+import globals as g
 
-def loadModel(model):
-    exec("import %s" % ("models." + model.replace(" ", "_") + ".py") + " *")
+def loadInfrastructure(config):
+    g.printStat("Loaded " + config + " into infrastructure database.")
 
-def loadInfraConfig(path):
-    db = TinyDB(path)
-    return db
+    db = TinyDB("config")
 
-loadInfraConfig("testpark_config.json")
+    infra = ["number", "dimensions", db]
+
+    return infra
+
+def mapInfrastructre(infra):
+    return "haha"

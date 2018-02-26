@@ -43,7 +43,7 @@ airDensity = 1.1716
 np.set_printoptions(formatter={'float': '{: 0.3f}'.format})
 
 for windDirectionI, windDirection in enumerate(windDirectionsFLORIS):
-    
+
     print 'wind direction %f deg' % windDirectionsWindRose[windDirectionI]
 
     baselineFloris = floris_assembly_opt_AEP(nTurbines=nTurbines, nDirections=1, optimize_yaw=False, optimize_position=False, datasize=datasize, nSamples = 0, nSpeeds = 1)
@@ -65,9 +65,9 @@ for windDirectionI, windDirection in enumerate(windDirectionsFLORIS):
     baselineFloris.run()
     baselinePower = np.sum(baselineFloris.floris_power_0.wt_power)
     baselinePowers.append(baselinePower)
-    
+
     print 'baseline power %f kW' % baselinePower
-    
+
     optFloris = floris_assembly_opt_AEP(nTurbines=nTurbines, nDirections=1, optimize_yaw=True, optimize_position=False, datasize=datasize, nSamples = 0, nSpeeds = 1, maxiter = maxiter)
 
     optFloris.windrose_directions    = np.array([windDirection]);
@@ -94,11 +94,11 @@ for windDirectionI, windDirection in enumerate(windDirectionsFLORIS):
 
     increasePercentage = 100 * (optPower - baselinePower) / baselinePower
     increasePercentages.append(increasePercentage)
-    
+
     optYaw = optFloris.yaw_0
     optYaws.append(optYaw)
 
-    print 'optimal yaw %s deg' % optYaw 
+    print 'optimal yaw %s deg' % optYaw
     print 'optimal power %f kW' % optPower
 
     print 'increase %f %%' % increasePercentage
@@ -173,7 +173,7 @@ velocitiesOpt = np.copy(visualFloris.ws_array_0.reshape(len(ySamples), len(xSamp
 
 vmax = np.max([velocitiesBaseline.max(),velocitiesOpt.max()])
 vmin = np.min([velocitiesBaseline.min(),velocitiesOpt.min()])
-axes[0].pcolormesh(xSamples, ySamples, velocitiesBaseline, cmap='coolwarm', vmin=vmin, vmax=vmax)
+axes[0].pcolormesh(xSamples, ySamplzes, velocitiesBaseline, cmap='coolwarm', vmin=vmin, vmax=vmax)
 axes[0].set_title('baseline')
 im = axes[1].pcolormesh(xSamples, ySamples, velocitiesOpt, cmap='coolwarm', vmin=vmin, vmax=vmax)
 axes[1].set_title('optimized yaw')
@@ -190,7 +190,7 @@ for axI, ax in enumerate(axes):
         turbineX = visualFloris.turbineX[turbI]
         turbineY = visualFloris.turbineY[turbI]
         rotorDiameter = visualFloris.rotorDiameter[turbI]
-        
+
         rotorAbsAngle = (windDirectionFLORISmaxIncrease + yaw)*np.pi/180.
         rotationMatrix = np.array([(np.cos(rotorAbsAngle), -np.sin(rotorAbsAngle)),(np.sin(rotorAbsAngle), np.cos(rotorAbsAngle))])
         rotorX = np.array([0,0])
