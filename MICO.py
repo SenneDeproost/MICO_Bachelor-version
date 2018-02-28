@@ -24,4 +24,4 @@ def MICO_wind(configuration, wind):
 
     print "done"
 
-MICO_wind("testpark_config.json", 50)
+MICO_wind("testpark_config.jon", 50)
