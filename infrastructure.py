@@ -4,30 +4,25 @@ import globals as g
 import json as j
 import os.path
 
+
 def loadInfrastructure(config):
     extension = ".json"
+    suffix = "_TinyDB"
     if not validFormat(config, extension):
         g.raiseError("loadInfrastructure", "File is not in a valid format.")
-    db_name = file[:-5] + "_TinyDB"
-
-
-
-
-
-
-
-    if os.path.isfile(config) and "_TinyDB" in config:
-        db_name = file[:-5] + "_TinyDB"
-        db = TinyDB(db_name + extension)
-        g.printStat("Loaded " + config + " into infrastructure database.")
-        return db
     else:
-        db = convertJsonToDB(config)
-        if db:
-            g.printStat("Loaded " + config + " into infrastructure database.")
-            return db
-        else: g.printStat("ERROR: " + file + "IS NOT A VALID EXTENSION TO CONVERT TO DATABASE.")
-
+        db_name = config[:-5] + suffix
+        name = config.strip(extension)
+        # TinyDB JSON is given
+        if name.endswith(suffix):
+            return TinyDB(config)
+        # Ordinary JSON is given, but TinyDB equivalent exists
+        elif os.path.exists(db_name + extension):
+            return TinyDB(db_name + extension)
+        # No equivalent TinyDB exists
+        else:
+            db = convertJsonToDB(config)
+            return TinyDB(db)
 
 
 def convertJsonToDB(file):
