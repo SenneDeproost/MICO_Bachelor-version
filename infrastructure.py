@@ -22,22 +22,25 @@ def loadInfrastructure(config):
         # No equivalent TinyDB exists
         else:
             db = convertJsonToDB(config)
-            return TinyDB(db)
+            return db
 
 
 def convertJsonToDB(file):
     extension = ".json"
     if validFormat(file, extension):
         data = j.load(open(file))
-        db_name = file[:-5] + "_TinyDB"
+        ext_len = len(extension)
+        db_name = file[:-ext_len] + "_TinyDB"
         db = TinyDB(db_name + extension)
+        counter = 1
         for obj in data:
+            obj["id"] = counter
+            counter += 1
             db.insert(obj)
         return db
     else:
         g.printStat("ERROR: " + file + "IS NOT A VALID EXTENSION TO CONVERT TO DATABASE.")
         return False
-
 
 
 def validFormat(file, extension):
