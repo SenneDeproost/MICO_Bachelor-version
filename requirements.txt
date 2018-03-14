@@ -3,3 +3,4 @@ numpy==1.12.1
 scipy==0.19.1
 NetworkX
 TinyDB
+Sympy
