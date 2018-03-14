@@ -26,6 +26,8 @@ def inWake(a, b, a_angle, wind):
     diameter = 40
     a_x = a["location"]["x"]
     a_y = a["location"]["y"]
+    b_x = b["location"]["x"]
+    b_y = b["location"]["y"]
     wind_angle = wind["angle"]
     radius = diameter/2
 
@@ -71,7 +73,7 @@ def inWake(a, b, a_angle, wind):
     plt.plot(blade_point_a1.x, blade_point_a1.y, "r+")
     plt.plot(blade_point_a2.x, blade_point_a2.y, "r+")
 
-    b_circle = plt.Circle((b["location"]["x"], b["location"]["y"]), radius)
+    b_circle = plt.Circle(Point2D(b_x, b_y), radius)
 
 
 
@@ -89,6 +91,16 @@ def inWake(a, b, a_angle, wind):
 
     plt.show()
 
+    border1 = Segment(Point2D(blade_point_a1.x, blade_point_a1.y), Point2D(zone_end1.x, zone_end1.y))
+    border2 = Segment(Point2D(blade_point_a2.x, blade_point_a2.y), Point2D(zone_end2.x, zone_end2.y))
+    b_circle = Circle(Point2D(b_x, b_y), radius)
+
+    if len(intersection(border1, b_circle)) != 0 or len(intersection(border2, b_circle)) != 0:
+        print intersection(border1, b_circle)
+        print intersection(border2, b_circle)
+        return True
+    else:
+        return False
 
 
 
@@ -108,12 +120,12 @@ b = {
     "model": "NREL 5MW",
     "location":
     {
-      "x": 5,
-      "y": 5
+      "x": 50,
+      "y": 50
     }
   }
 
-wind = {"angle": 15}
+wind = {"angle": 0}
 
 
-inWake(a, b, 0, wind)
+print inWake(a, b, 0, wind)
