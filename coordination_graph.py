@@ -14,8 +14,6 @@ def createCG(database, *parameters):
             if dep.dependsOn(entity, other, parameters) and entity["id"] != other["id"]:
                 cg.add_edge(entity["id"], other["id"])
 
-    print nx.edges(cg)
-
     return cg
 
 

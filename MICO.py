@@ -13,7 +13,7 @@ import coordination_graph as cg
 args = sys.argv
 argc = len(args)
 
-wind = {"angle": 5}
+wind = {"angle": -90}
 
 def MICO_wind(config, wind):
     g.printStat("Starting MICO_wind with " + config + " as configuration.")

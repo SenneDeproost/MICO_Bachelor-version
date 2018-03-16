@@ -52,7 +52,6 @@ def inWake(a, b, wind):
     )
 
     wind_angle = m.radians(wind_angle) + m.pi
-    print(wind_angle)
     zone_length = 200
 
     x_corr = m.cos(wind_angle)*zone_length
@@ -97,8 +96,6 @@ def inWake(a, b, wind):
     b_circle = Circle(Point2D(b_x, b_y), radius)
 
     if len(intersection(border1, b_circle)) != 0 or len(intersection(border2, b_circle)) != 0:
-        print intersection(border1, b_circle)
-        print intersection(border2, b_circle)
         return True
     else:
         return False
