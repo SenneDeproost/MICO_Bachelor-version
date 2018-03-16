@@ -4,13 +4,13 @@
 #                            senne.deproost@vub.be                            #
 # *************************************************************************** #
 
-import sys
+from sys import argv
 import globals as g
 import infrastructure as i
 import coordination_graph as cg
 #import q_learning as q
 
-args = sys.argv
+args = argv
 argc = len(args)
 
 wind = {"angle": -90}
@@ -25,5 +25,5 @@ def MICO_wind(config, wind):
 
     g.printStat("Done!")
 
-
+g.printStat("Done loading modules.")
 MICO_wind("testpark_config.json", wind)

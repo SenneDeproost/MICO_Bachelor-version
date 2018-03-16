@@ -1,5 +1,4 @@
 import networkx as nx
-from tinydb import TinyDB, Query
 
 import wind_dependencies as dep
 

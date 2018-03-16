@@ -1,15 +1,13 @@
 import math as m
-import matplotlib.pyplot as plt
-from sympy import *
+#import matplotlib.pyplot as plt
 from sympy.geometry import *
-import numpy as np
-import matplotlib.patches as patches
+
 
 # Dependency lies within a wake zone that is represented by a rectangle with as width the diameter of the blades of the
 # and as length infinity.
 
-plt.xlim(-200, 200)
-plt.ylim(-200, 200)
+# plt.xlim(-200, 200)
+# plt.ylim(-200, 200)
 
 class Point:
     def __init__(self,x_init,y_init):
@@ -73,7 +71,7 @@ def inWake(a, b, wind):
     #plt.plot(blade_point_a1.x, blade_point_a1.y, "r+")
     #plt.plot(blade_point_a2.x, blade_point_a2.y, "r+")
 
-    b_circle = plt.Circle(Point2D(b_x, b_y), radius)
+    #b_circle = plt.Circle(Point2D(b_x, b_y), radius)
 
 
 

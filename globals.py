@@ -4,7 +4,7 @@ global_vars = json.load(open("variables.json"))
 
 
 def printStat(message):
-    print(message)
+    print("[*] " + message)
 
 
 def raiseError(function, message):

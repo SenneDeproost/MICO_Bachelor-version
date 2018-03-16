@@ -9,7 +9,7 @@ def loadInfrastructure(config):
     extension = ".json"
     suffix = "_TinyDB"
     if not validFormat(config, extension):
-        g.raiseError("loadInfrastructure", "File is not in a valid format.")
+        g.raiseError("loadInfrastructure", "File " + config + " is not in a valid format.")
     else:
         db_name = config[:-5] + suffix
         name = config.strip(extension)
@@ -17,8 +17,8 @@ def loadInfrastructure(config):
         if name.endswith(suffix):
             return TinyDB(config)
         # Ordinary JSON is given, but TinyDB equivalent exists
-        elif os.path.exists(db_name + extension):
-            return TinyDB(db_name + extension)
+        #elif os.path.exists(db_name + extension):
+         #   return TinyDB(db_name + extension)
         # No equivalent TinyDB exists
         else:
             db = convertJsonToDB(config)
@@ -39,7 +39,7 @@ def convertJsonToDB(file):
             db.insert(obj)
         return db
     else:
-        g.printStat("ERROR: " + file + "IS NOT A VALID EXTENSION TO CONVERT TO DATABASE.")
+        g.raiseError("convertJsonToDB","File " + file + " is not in a valid format.")
         return False
 
 
