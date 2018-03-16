@@ -22,7 +22,7 @@ def linearFun(x_point, y_point, slope, x):
 
 
 
-def inWake(a, b, a_angle, wind):
+def inWake(a, b, wind):
     diameter = 40
     a_x = a["location"]["x"]
     a_y = a["location"]["y"]
@@ -31,11 +31,12 @@ def inWake(a, b, a_angle, wind):
     wind_angle = wind["angle"]
     radius = diameter/2
 
-    a_angle = m.radians(a_angle)
 
-    a_slope = m.tan(a_angle)
+    a_yaw = m.radians(a["yaw"])
 
-    corrected_a_angle = a_angle + m.pi/2
+    a_slope = m.tan(a_yaw)
+
+    corrected_a_angle = a_yaw + m.pi/2
 
     x_corr = m.cos(corrected_a_angle)*radius
     y_corr = m.sin(corrected_a_angle)*radius
@@ -68,28 +69,28 @@ def inWake(a, b, a_angle, wind):
     )
 
 
-    plt.plot([blade_point_a1.x, blade_point_a2.x], [blade_point_a1.y, blade_point_a2.y], "black")
-    plt.plot(a_x, a_y, "bo")
-    plt.plot(blade_point_a1.x, blade_point_a1.y, "r+")
-    plt.plot(blade_point_a2.x, blade_point_a2.y, "r+")
+    #plt.plot([blade_point_a1.x, blade_point_a2.x], [blade_point_a1.y, blade_point_a2.y], "black")
+    #plt.plot(a_x, a_y, "bo")
+    #plt.plot(blade_point_a1.x, blade_point_a1.y, "r+")
+    #plt.plot(blade_point_a2.x, blade_point_a2.y, "r+")
 
     b_circle = plt.Circle(Point2D(b_x, b_y), radius)
 
 
 
 
-    plt.plot(zone_end1.x, zone_end1.y, "g+")
-    plt.plot(zone_end2.x, zone_end2.y, "g+")
+    #plt.plot(zone_end1.x, zone_end1.y, "g+")
+    #plt.plot(zone_end2.x, zone_end2.y, "g+")
 
-    plt.plot([blade_point_a1.x, zone_end1.x], [blade_point_a1.y, zone_end1.y], "orange")
-    plt.plot([blade_point_a2.x, zone_end2.x], [blade_point_a2.y, zone_end2.y], "orange")
+    #plt.plot([blade_point_a1.x, zone_end1.x], [blade_point_a1.y, zone_end1.y], "orange")
+    #plt.plot([blade_point_a2.x, zone_end2.x], [blade_point_a2.y, zone_end2.y], "orange")
 
-    plt.xlim(-200, 200)
-    plt.ylim(-200, 200)
+    #plt.xlim(-200, 200)
+    #plt.ylim(-200, 200)
 
-    plt.gcf().gca().add_artist(b_circle)
+    #plt.gcf().gca().add_artist(b_circle)
 
-    plt.show()
+    #plt.show()
 
     border1 = Segment(Point2D(blade_point_a1.x, blade_point_a1.y), Point2D(zone_end1.x, zone_end1.y))
     border2 = Segment(Point2D(blade_point_a2.x, blade_point_a2.y), Point2D(zone_end2.x, zone_end2.y))
@@ -104,7 +105,8 @@ def inWake(a, b, a_angle, wind):
 
 
 
-def dependsOn(a, b, wind):
+def dependsOn(a, b, parameters):
+    wind = parameters[0]
     return inWake(a, b, wind)
 
 a = {
@@ -125,7 +127,5 @@ b = {
     }
   }
 
-wind = {"angle": 0}
+wind = {"angle": 70}
 
-
-print inWake(a, b, 0, wind)

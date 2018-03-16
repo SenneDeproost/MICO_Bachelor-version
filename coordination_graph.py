@@ -4,7 +4,7 @@ from tinydb import TinyDB, Query
 import wind_dependencies as dep
 
 
-def createCG(database, parameters):
+def createCG(database, *parameters):
     cg = nx.Graph()
     entities = database.all()
 
