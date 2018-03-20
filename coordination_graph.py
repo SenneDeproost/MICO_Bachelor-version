@@ -1,6 +1,7 @@
 import networkx as nx
 
 import wind_dependencies as dep
+import wind_rewards as rw
 
 
 def createCG(database, *parameters):
@@ -16,5 +17,10 @@ def createCG(database, *parameters):
     return cg
 
 
+def createValRules(CG):
+    return rw.createValRules(CG)
+
+
 def computeJointAction(CG):
+    nodes = "nodes"
     return 5
