@@ -173,7 +173,7 @@ velocitiesOpt = np.copy(visualFloris.ws_array_0.reshape(len(ySamples), len(xSamp
 
 vmax = np.max([velocitiesBaseline.max(),velocitiesOpt.max()])
 vmin = np.min([velocitiesBaseline.min(),velocitiesOpt.min()])
-axes[0].pcolormesh(xSamples, ySamplzes, velocitiesBaseline, cmap='coolwarm', vmin=vmin, vmax=vmax)
+axes[0].pcolormesh(xSamples, ySamples, velocitiesBaseline, cmap='coolwarm', vmin=vmin, vmax=vmax)
 axes[0].set_title('baseline')
 im = axes[1].pcolormesh(xSamples, ySamples, velocitiesOpt, cmap='coolwarm', vmin=vmin, vmax=vmax)
 axes[1].set_title('optimized yaw')
