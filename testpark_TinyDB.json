@@ -1,0 +1,1 @@
+{"_default": {"1": {"model": "NREL 5MW", "yaw": 0, "location": {"y": 5, "x": 500}, "id": 1}, "2": {"model": "NREL 5MW", "yaw": 0, "id": 2, "location": {"y": 0, "x": 50}}, "3": {"model": "NREL 5MW", "yaw": 0, "location": {"y": 100, "x": 6}, "id": 3}}}

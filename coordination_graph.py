@@ -16,4 +16,5 @@ def createCG(database, *parameters):
     return cg
 
 
-
+def computeJointAction(CG):
+    return 5

@@ -26,4 +26,4 @@ def MICO_wind(config, wind):
     g.printStat("Done!")
 
 g.printStat("Done loading modules.")
-MICO_wind("testpark_config.json", wind)
+MICO_wind("testpark.json", wind)

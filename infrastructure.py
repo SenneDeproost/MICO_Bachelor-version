@@ -11,7 +11,6 @@ def loadInfrastructure(config):
     if not validFormat(config, extension):
         g.raiseError("loadInfrastructure", "File " + config + " is not in a valid format.")
     else:
-        db_name = config[:-5] + suffix
         name = config.strip(extension)
         # TinyDB JSON is given
         if name.endswith(suffix):
@@ -32,6 +31,7 @@ def convertJsonToDB(file):
         ext_len = len(extension)
         db_name = file[:-ext_len] + "_TinyDB"
         db = TinyDB(db_name + extension)
+        db.purge()
         counter = 1
         for obj in data:
             obj["id"] = counter

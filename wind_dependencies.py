@@ -32,10 +32,9 @@ def inWake(a, b, wind):
 
     a_yaw = m.radians(a["yaw"])
 
-    a_slope = m.tan(a_yaw)
-
     corrected_a_angle = a_yaw + m.pi/2
 
+    # Correcting values for the axis.
     x_corr = m.cos(corrected_a_angle)*radius
     y_corr = m.sin(corrected_a_angle)*radius
 
@@ -103,24 +102,3 @@ def inWake(a, b, wind):
 def dependsOn(a, b, parameters):
     wind = parameters[0]
     return inWake(a, b, wind)
-
-a = {
-    "model": "NREL 5MW",
-    "location":
-    {
-      "x": 20,
-      "y": 20
-    }
-  }
-
-b = {
-    "model": "NREL 5MW",
-    "location":
-    {
-      "x": 50,
-      "y": 50
-    }
-  }
-
-wind = {"angle": 70}
-
