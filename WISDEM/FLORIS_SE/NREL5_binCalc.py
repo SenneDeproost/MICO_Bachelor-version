@@ -26,41 +26,37 @@ axialInduction = 1.0/3.0 # used only for initialization
 generator_efficiency = 0.944
 hub_height = 90.0
 NREL5MWCPCT = pickle.load(open('NREL5MWCPCT.p'))
-datasize = NREL5MWCPCT.CP.size
+datasize = NREL5MWCPCeT.CP.size
 
 
 
-def calc
-turbineXinit = np.array([1118.1, 1881.9])
-turbineYinit = np.array([1279.5, 1720.5])
+def calcProduction(turbine_a, turbine_b, wind):
 
-myFloris = floris_assembly_opt_AEP(nTurbines=2, nDirections=1, optimize_yaw=False,
-                                   optimize_position=False,
-                                   datasize=datasize, nSamples = resolution*resolution)
+    turbineXinit = np.array([turbine_a["location"]["x"], turbine_b["location"]["x"])
+    turbineYinit = np.array([turbine_a["location"]["y"], turbine_b["location"]["y"])
 
-# use default FLORIS parameters
-myFloris.parameters = FLORISParameters()
+    myFloris = floris_assembly_opt_AEP(nTurbines=2, nDirections=1, optimize_yaw=False,
+                                        optimize_position=False,
+                                        datasize=datasize, nSamples = resolution*resolution)
 
-# use default FLORIS parameters
-myFloris.parameters = FLORISParameters()
+    # use default FLORIS parameters
+    myFloris.parameters = FLORISParameters()
 
-# load turbine properties into FLORIS
-myFloris.curve_wind_speed = NREL5MWCPCT.wind_speed
-myFloris.curve_CP = NREL5MWCPCT.CP
-myFloris.curve_CT = NREL5MWCPCT.CT
-myFloris.axialInduction = np.array([axialInduction, axialInduction])
-myFloris.rotorDiameter = np.array([rotorDiameter, rotorDiameter])
-myFloris.rotorArea = np.array([rotorArea, rotorArea])
-myFloris.hubHeight = np.array([hub_height, hub_height])
-myFloris.generator_efficiency = np.array([generator_efficiency, generator_efficiency])
-myFloris.turbineX = turbineXinit
-myFloris.turbineY = turbineYinit
+    # load turbine properties into FLORIS
+    myFloris.curve_wind_speed = NREL5MWCPCT.wind_speed
+    myFloris.curve_CP = NREL5MWCPCT.CP
+    myFloris.curve_CT = NREL5MWCPCT.CT
+    myFloris.axialInduction = np.array([axialInduction, axialInduction])
+    myFloris.rotorDiameter = np.array([rotorDiameter, rotorDiameter])
+    myFloris.rotorArea = np.array([rotorArea, rotorArea])
+    myFloris.hubHeight = np.array([hub_height, hub_height])
+    myFloris.generator_efficiency = np.array([generator_efficiency, generator_efficiency])
+    myFloris.turbineX = turbineXinit
+    myFloris.turbineY = turbineYinit
 
-# Define site measurements
-windDirection = 30.
-myFloris.windrose_directions = np.array([windDirection])
-wind_speed = 8.1    # m/s
-myFloris.windrose_speeds = wind_speed
-myFloris.air_density = 1.1716
-
-myFloris.initVelocitiesTurbines = np.ones_like(myFloris.windrose_directions)*wind_speed
+    # Define site measurements
+    windDirection = wind["angle"]
+    myFloris.windrose_directions = np.array([windDirection])
+    wind_speed = wind["speed"]    # m/s
+    myFloris.windrose_speeds = wind_speed
+    myFloris.air_density = 1.1716

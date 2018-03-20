@@ -8,12 +8,14 @@ from sys import argv
 import globals as g
 import infrastructure as i
 import coordination_graph as cg
-#import q_learning as q
+import banner as b
+
+b.printBanner()
 
 args = argv
 argc = len(args)
 
-wind = {"angle": -90}
+wind = {"angle": -90, "speed": 8.1}
 
 def MICO_wind(config, wind):
     g.printStat("Starting MICO_wind with " + config + " as configuration.")
