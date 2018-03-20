@@ -19,9 +19,6 @@ def MICO_wind(config, wind):
     g.printStat("Starting MICO_wind with " + config + " as configuration.")
     infra = i.loadInfrastructure(config)
     CG = cg.createCG(infra, wind)
-    #rewards = q.createRewardTable(CG)
-
-    print CG.edges()
 
     g.printStat("Done!")
 

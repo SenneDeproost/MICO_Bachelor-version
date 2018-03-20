@@ -6,6 +6,7 @@ import os.path
 
 
 def loadInfrastructure(config):
+    g.printStat("Loading infrastructure.")
     extension = ".json"
     suffix = "_TinyDB"
     if not validFormat(config, extension):
@@ -25,6 +26,7 @@ def loadInfrastructure(config):
 
 
 def convertJsonToDB(file):
+    g.printStat(file + " needs conversion.")
     extension = ".json"
     if validFormat(file, extension):
         data = j.load(open(file))
@@ -37,6 +39,7 @@ def convertJsonToDB(file):
             obj["id"] = counter
             counter += 1
             db.insert(obj)
+        g.printStat("File converted to database.")
         return db
     else:
         g.raiseError("convertJsonToDB","File " + file + " is not in a valid format.")
