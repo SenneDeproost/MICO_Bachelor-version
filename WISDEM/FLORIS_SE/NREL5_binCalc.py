@@ -26,14 +26,25 @@ axialInduction = 1.0/3.0 # used only for initialization
 generator_efficiency = 0.944
 hub_height = 90.0
 NREL5MWCPCT = pickle.load(open('NREL5MWCPCT.p'))
-datasize = NREL5MWCPCeT.CP.size
+datasize = NREL5MWCPCT.CP.size
 
+wind = {"angle": 0, "speed": 8}
+a = {"location": {"x": 1000, "y": 20}, "yaw": 0}
+b = {"location": {"x": 55, "y": 20}, "yaw": 0}
 
 
 def calcProduction(turbine_a, turbine_b, wind):
 
-    turbineXinit = np.array([turbine_a["location"]["x"], turbine_b["location"]["x"])
-    turbineYinit = np.array([turbine_a["location"]["y"], turbine_b["location"]["y"])
+    a_x = turbine_a["location"]["x"]
+    b_x = turbine_b["location"]["x"]
+    a_y = turbine_a["location"]["y"]
+    b_y = turbine_b["location"]["y"]
+
+    a_yaw = turbine_a["yaw"]
+    b_yaw = turbine_b["yaw"]
+
+    turbineXinit = np.array([a_x, b_x])
+    turbineYinit = np.array([a_y, b_y])
 
     myFloris = floris_assembly_opt_AEP(nTurbines=2, nDirections=1, optimize_yaw=False,
                                         optimize_position=False,
@@ -53,6 +64,7 @@ def calcProduction(turbine_a, turbine_b, wind):
     myFloris.generator_efficiency = np.array([generator_efficiency, generator_efficiency])
     myFloris.turbineX = turbineXinit
     myFloris.turbineY = turbineYinit
+    myFloris.yaw = np.array([a_yaw, b_yaw])
 
     # Define site measurements
     windDirection = wind["angle"]
@@ -60,3 +72,9 @@ def calcProduction(turbine_a, turbine_b, wind):
     wind_speed = wind["speed"]    # m/s
     myFloris.windrose_speeds = wind_speed
     myFloris.air_density = 1.1716
+
+    myFloris.run()
+    baselinePower = np.sum(myFloris.floris_power_0.wt_power)
+    return baselinePower
+
+calcProduction(a, b, wind)

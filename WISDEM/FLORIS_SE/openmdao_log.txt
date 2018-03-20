@@ -1,1 +1,0 @@
-Mar 20 21:34:38 W driver: Positive directional derivative for linesearch

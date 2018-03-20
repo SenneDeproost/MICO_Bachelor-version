@@ -1,6 +1,6 @@
-# This example script compares FLORIS predictions with steady-state SOWFA data as obtained 
+# This example script compares FLORIS predictions with steady-state SOWFA data as obtained
 # throught the simulations described in:
-#   
+#
 
 import numpy as np
 
@@ -13,7 +13,7 @@ import pickle
 from Parameters import FLORISParameters
 from Circle_assembly import floris_assembly_opt_AEP
 
-# Load steady-state power data from SOWFA 
+# Load steady-state power data from SOWFA
 ICOWESdata = loadmat('YawPosResults.mat')
 
 # visualization: define resolution
@@ -163,7 +163,7 @@ velocities = list()
 velocities_cut = list()
 
 for pos2 in posrange:
-    
+
     # Define turbine locations and orientation
     effUdXY = 0.523599
     XY = np.array([turbineXinit, turbineYinit]) + np.dot(np.array([[np.cos(effUdXY),-np.sin(effUdXY)], [np.sin(effUdXY),np.cos(effUdXY)]]), np.array([[0., 0], [0,pos2]]))
