@@ -31,6 +31,24 @@ datasize = NREL5MWCPCT.CP.size
 wind = {"angle": 0, "speed": 8}
 a = {"location": {"x": 1000, "y": 20}, "yaw": 0}
 b = {"location": {"x": 55, "y": 20}, "yaw": 0}
+c = {"location": {"x": 55, "y": 20}, "yaw": 50}
+
+myFloris = floris_assembly_opt_AEP(nTurbines=2, nDirections=1, optimize_yaw=False,
+                                    optimize_position=False,
+                                    datasize=datasize, nSamples = resolution*resolution)
+
+# use default FLORIS parameters
+myFloris.parameters = FLORISParameters()
+
+# load turbine properties into FLORIS
+myFloris.curve_wind_speed = NREL5MWCPCT.wind_speed
+myFloris.curve_CP = NREL5MWCPCT.CP
+myFloris.curve_CT = NREL5MWCPCT.CT
+myFloris.axialInduction = np.array([axialInduction, axialInduction])
+myFloris.rotorDiameter = np.array([rotorDiameter, rotorDiameter])
+myFloris.rotorArea = np.array([rotorArea, rotorArea])
+myFloris.hubHeight = np.array([hub_height, hub_height])
+myFloris.generator_efficiency = np.array([generator_efficiency, generator_efficiency])
 
 
 def calcProduction(turbine_a, turbine_b, wind):
@@ -46,22 +64,6 @@ def calcProduction(turbine_a, turbine_b, wind):
     turbineXinit = np.array([a_x, b_x])
     turbineYinit = np.array([a_y, b_y])
 
-    myFloris = floris_assembly_opt_AEP(nTurbines=2, nDirections=1, optimize_yaw=False,
-                                        optimize_position=False,
-                                        datasize=datasize, nSamples = resolution*resolution)
-
-    # use default FLORIS parameters
-    myFloris.parameters = FLORISParameters()
-
-    # load turbine properties into FLORIS
-    myFloris.curve_wind_speed = NREL5MWCPCT.wind_speed
-    myFloris.curve_CP = NREL5MWCPCT.CP
-    myFloris.curve_CT = NREL5MWCPCT.CT
-    myFloris.axialInduction = np.array([axialInduction, axialInduction])
-    myFloris.rotorDiameter = np.array([rotorDiameter, rotorDiameter])
-    myFloris.rotorArea = np.array([rotorArea, rotorArea])
-    myFloris.hubHeight = np.array([hub_height, hub_height])
-    myFloris.generator_efficiency = np.array([generator_efficiency, generator_efficiency])
     myFloris.turbineX = turbineXinit
     myFloris.turbineY = turbineYinit
     myFloris.yaw = np.array([a_yaw, b_yaw])
@@ -77,4 +79,5 @@ def calcProduction(turbine_a, turbine_b, wind):
     baselinePower = np.sum(myFloris.floris_power_0.wt_power)
     return baselinePower
 
-calcProduction(a, b, wind)
+print calcProduction(a, b, wind)
+print calcProduction(a, c, wind)

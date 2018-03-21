@@ -6,11 +6,11 @@ import os.path
 
 
 def loadInfrastructure(config):
-    g.printStat("Loading infrastructure.")
+    g.printStat("Loading infrastructure")
     extension = ".json"
     suffix = "_TinyDB"
     if not validFormat(config, extension):
-        g.raiseError("loadInfrastructure", "File " + config + " is not in a valid format.")
+        g.raiseError("loadInfrastructure", "File " + config + " is not in a valid format")
     else:
         name = config.strip(extension)
         # TinyDB JSON is given
@@ -26,7 +26,7 @@ def loadInfrastructure(config):
 
 
 def convertJsonToDB(file):
-    g.printStat(file + " needs conversion.")
+    g.printStat(file + " needs conversion")
     extension = ".json"
     if validFormat(file, extension):
         data = j.load(open(file))
@@ -34,15 +34,16 @@ def convertJsonToDB(file):
         db_name = file[:-ext_len] + "_TinyDB"
         db = TinyDB(db_name + extension)
         db.purge()
+        g.printStat("   Old database purged")
         counter = 1
         for obj in data:
             obj["id"] = counter
             counter += 1
             db.insert(obj)
-        g.printStat("File converted to database.")
+        g.printStat("File converted to database")
         return db
     else:
-        g.raiseError("convertJsonToDB","File " + file + " is not in a valid format.")
+        g.raiseError("convertJsonToDB","File " + file + " is not in a valid format")
         return False
 
 

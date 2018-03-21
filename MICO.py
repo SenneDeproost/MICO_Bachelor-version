@@ -15,14 +15,15 @@ b.printBanner()
 args = argv
 argc = len(args)
 
-wind = {"angle": -90, "speed": 8.1}
+wind = {"angle": 180, "speed": 8.1}
 
 def MICO_wind(config, wind):
-    g.printStat("Starting MICO_wind with " + config + " as configuration.")
+    g.printStat("Starting MICO_wind with " + config + " as configuration")
+    g.printStat("   Wind blows " + str(wind["angle"]) + " degrees with a speed of " + str(wind["speed"]) + " m/s")
     infra = i.loadInfrastructure(config)
     CG = cg.createCG(infra, wind)
 
     g.printStat("Done!")
 
-g.printStat("Done loading modules.")
+g.printStat("Done loading modules")
 MICO_wind("testpark.json", wind)
