@@ -19,6 +19,7 @@ def createCG(database, *parameters):
 
 
 def createValRules(CG):
+    g.printStat('Creating value rules')
     return rw.createValRules(CG)
 
 

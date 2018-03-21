@@ -10,7 +10,8 @@ def loadInfrastructure(config):
     extension = ".json"
     suffix = "_TinyDB"
     if not validFormat(config, extension):
-        g.raiseError("loadInfrastructure", "File " + config + " is not in a valid format")
+        g.raiseError("loadInfrastructure",
+                     "File " + config + " is not in a valid format")
     else:
         name = config.strip(extension)
         # TinyDB JSON is given
@@ -40,10 +41,11 @@ def convertJsonToDB(file):
             obj["id"] = counter
             counter += 1
             db.insert(obj)
-        g.printStat("File converted to database")
+        g.printStat("   File converted to database")
         return db
     else:
-        g.raiseError("convertJsonToDB","File " + file + " is not in a valid format")
+        g.raiseError("convertJsonToDB",
+                     "File " + file + " is not in a valid format")
         return False
 
 
