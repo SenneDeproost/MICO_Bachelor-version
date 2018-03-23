@@ -18,9 +18,9 @@ def createCG(database, *parameters):
     return cg
 
 
-def createValRules(CG):
+def createValRules(CG, infrastructure, *parameters):
     g.printStat('Creating value rules')
-    return rw.createValRules(CG)
+    return rw.createValRules(CG, infrastructure, parameters)
 
 
 def computeJointAction(CG):

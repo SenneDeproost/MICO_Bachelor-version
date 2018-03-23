@@ -22,6 +22,7 @@ def MICO_wind(config, wind):
     g.printStat("   Wind blows " + str(wind["angle"]) + " degrees with a speed of " + str(wind["speed"]) + " m/s")
     infra = i.loadInfrastructure(config)
     CG = cg.createCG(infra, wind)
+    vr = cg.createValRules(CG, infra, wind)
 
     g.printStat("Done!")
 
