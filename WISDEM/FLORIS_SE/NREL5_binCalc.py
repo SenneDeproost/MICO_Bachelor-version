@@ -14,7 +14,7 @@ from Parameters import FLORISParameters
 from Circle_assembly import floris_assembly_opt_AEP
 
 # Load steady-state power data from SOWFA
-ICOWESdata = loadmat('YawPosResults.mat')
+#ICOWESdata = loadmat('YawPosResults.mat')
 
 # visualization: define resolution
 resolution = 75
@@ -25,13 +25,14 @@ rotorArea = np.pi*rotorDiameter*rotorDiameter/4.0
 axialInduction = 1.0/3.0 # used only for initialization
 generator_efficiency = 0.944
 hub_height = 90.0
-NREL5MWCPCT = pickle.load(open('NREL5MWCPCT.p'))
+NREL5MWCPCT = pickle.load(open('WISDEM/FLORIS_SE/NREL5MWCPCT.p'))
 datasize = NREL5MWCPCT.CP.size
 
-wind = {"angle": 0, "speed": 8}
-a = {"location": {"x": 1000, "y": 20}, "yaw": 0}
-b = {"location": {"x": 55, "y": 20}, "yaw": 0}
-c = {"location": {"x": 55, "y": 20}, "yaw": 50}
+#DEBUG
+#wind = {"angle": 0, "speed": 8}
+#a = {"location": {"x": 1000, "y": 20}, "yaw": 0}
+#b = {"location": {"x": 55, "y": 20}, "yaw": 0}
+#c = {"location": {"x": 55, "y": 20}, "yaw": 50}
 
 myFloris = floris_assembly_opt_AEP(nTurbines=2, nDirections=1, optimize_yaw=False,
                                     optimize_position=False,
@@ -78,6 +79,3 @@ def calcProduction(turbine_a, turbine_b, wind):
     myFloris.run()
     baselinePower = np.sum(myFloris.floris_power_0.wt_power)
     return baselinePower
-
-print calcProduction(a, b, wind)
-print calcProduction(a, c, wind)

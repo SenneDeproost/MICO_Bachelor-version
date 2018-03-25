@@ -20,9 +20,6 @@ def createCG(database, *parameters):
 
 def createValRules(CG, infrastructure, *parameters):
     g.printStat('Creating value rules')
-    return rw.createValRules(CG, infrastructure, parameters)
-
-
-def computeJointAction(CG):
-    nodes = "nodes"
-    return 5
+    result = rw.createValRules(CG, infrastructure, parameters)
+    print result
+    return result

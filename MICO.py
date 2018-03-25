@@ -15,7 +15,7 @@ b.printBanner()
 args = argv
 argc = len(args)
 
-wind = {"angle": 180, "speed": 8.1}
+wind = {"angle": 270, "speed": 8.1}
 
 def MICO_wind(config, wind):
     g.printStat("Starting MICO_wind with " + config + " as configuration")
