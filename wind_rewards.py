@@ -16,6 +16,7 @@ def createValRules(CG, infrastructure, parameters):
         actions = f.read().splitlines()
         q = db.Query()
         for action in actions:
+            productions_a = []
             turbine_a = infrastructure.search(q.id == a)[0]
             act_a = splitActPars(action)
             turbine_a["yaw"] = int(act_a["parameters"])
@@ -24,9 +25,10 @@ def createValRules(CG, infrastructure, parameters):
                 turbine_b = infrastructure.search(q.id == b)[0]
                 act_b = splitActPars(action)
                 turbine_b["yaw"] = int(act_b["parameters"])
-                g.printStat("       Turbine " + str(b) + ": " + str(action))
+                g.printStat("         Turbine " + str(b) + ": " + str(action))
                 calculation = bc.calcProduction(turbine_a, turbine_b, wind)
-                edge_values.append(calculation)
+                productions_a.append(calculation)
+            edge_values.append(productions_a)
         result.append(edge_values)
 
     return result
