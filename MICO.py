@@ -15,7 +15,7 @@ b.printBanner()
 args = argv
 argc = len(args)
 
-wind = {"angle": 270, "speed": 8.1}
+wind = {"angle": 180, "speed": 8.1}
 
 def MICO_wind(config, wind):
     g.printStat("Starting MICO_wind with " + config + " as configuration")
@@ -23,6 +23,11 @@ def MICO_wind(config, wind):
     infra = i.loadInfrastructure(config)
     CG = cg.createCG(infra, wind)
     vr = cg.createValRules(CG, infra, wind)
+
+    print "BINS"
+    print vr[0]
+    print "SINS"
+    print vr[1]
 
     g.printStat("Done!")
 

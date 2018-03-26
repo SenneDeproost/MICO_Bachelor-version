@@ -21,5 +21,4 @@ def createCG(database, *parameters):
 def createValRules(CG, infrastructure, *parameters):
     g.printStat('Creating value rules')
     result = rw.createValRules(CG, infrastructure, parameters)
-    print result
     return result

@@ -7,7 +7,8 @@ import globals as g
 def createValRules(CG, infrastructure, parameters):
     wind = parameters[0]
     edges = CG.edges()
-    result = []
+    bin_calcs = []
+    sin_calcs = []
     q = db.Query()
 
     for edge in edges:
@@ -31,23 +32,23 @@ def createValRules(CG, infrastructure, parameters):
                 calculation = bc.calcProduction(turbine_a, turbine_b, wind)
                 productions_a.append(calculation)
             edge_values.append(productions_a)
-        result.append(edge_values)
+        bin_calcs.append(edge_values)
 
     singles = nx.isolates(CG)
     if len(singles) != 0:
         g.printStat("   Singles found, creating their value rules")
         wind_angle = wind["angle"]
-        single_calcs = []
         for turbine in singles:
             g.printStat("       Turbine " + str(turbine) + ": " + str(wind_angle))
             turb = infrastructure.search(q.id == turbine)[0]
             calculation = sc.calcProduction(turb, wind)
-            single_calcs.append(calculation)
+            sin_calcs.append(calculation)
 
-
-        result.append(single_calcs)
-
+    result = (bin_calcs, sin_calcs)
     return result
+
+def changeYaw(turbine, new_yaw):
+    turbine["yaw"] = new_yaw
 
 def splitActPars(string):
     first_paren = string.find('(')
@@ -55,8 +56,3 @@ def splitActPars(string):
     action_name = string[:first_paren]
     parameters = string[first_paren + 1:last_paren]
     return {"action": action_name, "parameters": parameters}
-
-
-
-def changeYaw(turbine, new_yaw):
-    turbine["yaw"] = new_yaw
