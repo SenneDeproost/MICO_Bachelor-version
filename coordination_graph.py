@@ -2,6 +2,7 @@ import networkx as nx
 import globals as g
 import wind_dependencies as dep
 import wind_rewards as rw
+import wind_joint as j
 
 
 def createCG(database, *parameters):
@@ -22,3 +23,9 @@ def createValRules(CG, infrastructure, *parameters):
     g.printStat('Creating value rules')
     result = rw.createValRules(CG, infrastructure, parameters)
     return result
+
+def findOJA(CG, value_rules):
+    edges = CG.edges()
+    bins = value_rules[0]
+    sins = value_rules[1]
+    result = j.findOJA(CG, bins, sins, edges)

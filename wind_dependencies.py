@@ -21,7 +21,7 @@ def linearFun(x_point, y_point, slope, x):
 
 
 def inWake(a, b, wind):
-    diameter = 40
+    diameter = 126.4
     a_x = a["location"]["x"]
     a_y = a["location"]["y"]
     b_x = b["location"]["x"]

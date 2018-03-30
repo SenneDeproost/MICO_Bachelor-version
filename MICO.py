@@ -10,7 +10,7 @@ import infrastructure as i
 import coordination_graph as cg
 import banner as b
 
-b.printBanner()
+#b.printBanner()
 
 args = argv
 argc = len(args)
@@ -23,11 +23,11 @@ def MICO_wind(config, wind):
     infra = i.loadInfrastructure(config)
     CG = cg.createCG(infra, wind)
     vr = cg.createValRules(CG, infra, wind)
-
     print "BINS"
     print vr[0]
     print "SINS"
     print vr[1]
+    OJA = cg.findOJA(CG, vr)
 
     g.printStat("Done!")
 
