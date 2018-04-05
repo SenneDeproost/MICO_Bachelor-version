@@ -34,6 +34,9 @@ def createValRules(CG, infrastructure, parameters):
             edge_values.append(productions_a)
         bin_calcs.append(edge_values)
 
+
+    # Wind turbines without any influence of other turbines will have an optimal
+    # yaw equal to the directon the wind blows.
     singles = nx.isolates(CG)
     if len(singles) != 0:
         g.printStat("   Singles found, creating their value rules")

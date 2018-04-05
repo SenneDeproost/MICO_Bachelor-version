@@ -10,7 +10,7 @@ import infrastructure as i
 import coordination_graph as cg
 import banner as b
 
-#b.printBanner()
+b.printBanner()
 
 args = argv
 argc = len(args)
