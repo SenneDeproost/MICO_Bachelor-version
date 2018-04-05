@@ -7,7 +7,7 @@ import wind_joint as j
 
 def createCG(database, *parameters):
     g.printStat("Creating coordination graph")
-    cg = nx.Graph()
+    cg = nx.DiGraph()
     entities = database.all()
     for entity in entities:
         g.printStat("   Adding node " + str(entity["id"]) + " to CG")
