@@ -25,7 +25,7 @@ rotorArea = np.pi*rotorDiameter*rotorDiameter/4.0
 axialInduction = 1.0/3.0 # used only for initialization
 generator_efficiency = 0.944
 hub_height = 90.0
-NREL5MWCPCT = pickle.load(open('NREL5MWCPCT.p'))
+NREL5MWCPCT = pickle.load(open('WISDEM/FLORIS_SE/NREL5MWCPCT.p'))
 datasize = NREL5MWCPCT.CP.size
 
 #DEBUG
@@ -83,6 +83,5 @@ def calcProduction(turbine_a, turbine_b, turbine_c, wind):
 
     myFloris.run()
     baselinePower = np.sum(myFloris.floris_power_0.wt_power)
-    print baselinePower
     return baselinePower
-calcProduction(a, b, c, wind)
+#calcProduction(a, b, c, wind)

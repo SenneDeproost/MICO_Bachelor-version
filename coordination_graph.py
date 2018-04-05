@@ -19,10 +19,23 @@ def createCG(database, *parameters):
     return cg
 
 
-def createValRules(CG, infrastructure, *parameters):
-    g.printStat('Creating value rules')
-    result = rw.createValRules(CG, infrastructure, parameters)
-    return result
+#def createValRules(CG, infrastructure, *parameters):
+#    g.printStat('Creating value rules')
+#    result = rw.createValRules(CG, infrastructure, parameters)
+#    return result
+
+def createValueRule(ids, actions):
+    g.printStat("   Creating value rule for " + str(ids))
+
+    tuples = []
+
+    for id in ids:
+        tuples.Append([id, actions[id]])
+
+    rule = {
+    "context": tuples,
+    "payoff": 'NULL'
+    }
 
 def findOJA(CG, value_rules):
     edges = CG.edges()

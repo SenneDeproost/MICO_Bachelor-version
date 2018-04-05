@@ -20,16 +20,30 @@ wind = {"angle": 180, "speed": 8.1}
 def MICO_wind(config, wind):
     g.printStat("Starting MICO_wind with " + config + " as configuration")
     g.printStat("   Wind blows " + str(wind["angle"]) + " degrees with a speed of " + str(wind["speed"]) + " m/s")
+
     infra = i.loadInfrastructure(config)
     CG = cg.createCG(infra, wind)
-    vr = cg.createValRules(CG, infra, wind)
-    print "BINS"
-    print vr[0]
-    print "SINS"
-    print vr[1]
-    OJA = cg.findOJA(CG, vr)
+    valueRules = []
+    nTurbines = len(CG)
+    nActions = range(360*nTurbines)
+    nEpisodes = 10
+
+    for episode in xrange(nEpisodes):
+
+        # Find optimal joint action (OJA) using variable elimination
+
+        print "Fuck"
+        # Chose an action ALPHA with epsilon greedy (or a random action)
+
+        # Validate ALPHA in WISDEM and receive the powerproductions
+
+        # Update the value rules
+
 
     g.printStat("Done!")
 
 g.printStat("Done loading modules")
-MICO_wind("testpark.json", wind)
+
+
+
+MICO_wind("sinpark.json", wind)
