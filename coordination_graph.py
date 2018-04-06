@@ -1,4 +1,5 @@
 import networkx as nx
+from tinydb import TinyDB, Query
 import globals as g
 import wind_dependencies as dep
 import wind_rewards as rw
@@ -19,26 +20,60 @@ def createCG(database, *parameters):
     return cg
 
 
-#def createValRules(CG, infrastructure, *parameters):
-#    g.printStat('Creating value rules')
-#    result = rw.createValRules(CG, infrastructure, parameters)
-#    return result
+def createValueRulesDB(config):
+    print config
+    g.printStat("Creating value rules database")
+    extension = ".json"
+    suffix = "_valRules_TinyDB"
+    if not validFormat(config, extension):
+        g.raiseError("loadValueRules",
+                     "File " + config + " is not in a valid format")
+    else:
+        return TinyDB(config[:-len(extension)] + suffix + extension)
 
-def createValueRule(ids, actions):
-    g.printStat("   Creating value rule for " + str(ids))
 
-    tuples = []
+def validFormat(file, extension):
+    return file.endswith(extension)
 
-    for id in ids:
-        tuples.Append([id, actions[id]])
 
-    rule = {
-    "context": tuples,
-    "payoff": 'NULL'
-    }
+# A context is an array of objects with a agent and an action field
+def insertValueRule(context, payoff, db):
+    agents = context["agents"]
+    actions = context["actions"]
 
-def findOJA(CG, value_rules):
-    edges = CG.edges()
-    bins = value_rules[0]
-    sins = value_rules[1]
-    result = j.findOJA(CG, bins, sins, edges)
+    db.insert({
+    "agents":    agents,
+    "actions":   actions,
+    "payoff":    payoff
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+#def findInvolvement(agent, valueRules)
+
+
+
+#def calculateLocalQ(agent, action, valueRules):
+#    involvement = findInvolvement(agent, action)
+
+
+
+
+
+#def updateValueRule(valueRule, reward):
+#    contect = valueRule["context"]
+#    payoff = valueRule["payoff"]
+#    return payoff + g.learningRate
+
+
+#def findOJA(CG, value_rules):
+#    return 5

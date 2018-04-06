@@ -15,24 +15,32 @@ b.printBanner()
 args = argv
 argc = len(args)
 
+epsilon = 0.1
+learningRate = 0.9
+discount = 0.9
+
+extension = ".json"
+
 wind = {"angle": 180, "speed": 8.1}
 
 def MICO_wind(config, wind):
     g.printStat("Starting MICO_wind with " + config + " as configuration")
     g.printStat("   Wind blows " + str(wind["angle"]) + " degrees with a speed of " + str(wind["speed"]) + " m/s")
 
-    infra = i.loadInfrastructure(config)
+    infra = i.loadInfrastructureDB(config)
     CG = cg.createCG(infra, wind)
-    valueRules = []
+    valueRules = cg.createValueRulesDB(config)
     nTurbines = len(CG)
     nActions = range(360*nTurbines)
     nEpisodes = 10
 
     for episode in xrange(nEpisodes):
+        print episode
 
         # Find optimal joint action (OJA) using variable elimination
 
-        print "Fuck"
+        #cg.findOJA(CG, valueRules)
+
         # Chose an action ALPHA with epsilon greedy (or a random action)
 
         # Validate ALPHA in WISDEM and receive the powerproductions
@@ -43,7 +51,5 @@ def MICO_wind(config, wind):
     g.printStat("Done!")
 
 g.printStat("Done loading modules")
-
-
 
 MICO_wind("sinpark.json", wind)

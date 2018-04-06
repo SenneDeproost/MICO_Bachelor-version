@@ -5,15 +5,15 @@ import json as j
 import os.path
 
 
-def loadInfrastructure(config):
+def loadInfrastructureDB(config):
     g.printStat("Loading infrastructure")
     extension = ".json"
-    suffix = "_TinyDB"
+    suffix = "_infra_TinyDB"
     if not validFormat(config, extension):
         g.raiseError("loadInfrastructure",
                      "File " + config + " is not in a valid format")
     else:
-        name = config.strip(extension)
+        name = config[:-len(extension)]
         # TinyDB JSON is given
         if name.endswith(suffix):
             return TinyDB(config)
@@ -32,7 +32,7 @@ def convertJsonToDB(file):
     if validFormat(file, extension):
         data = j.load(open(file))
         ext_len = len(extension)
-        db_name = file[:-ext_len] + "_TinyDB"
+        db_name = file[:-ext_len] + "_infra_TinyDB"
         db = TinyDB(db_name + extension)
         db.purge()
         g.printStat("   Old database purged")
