@@ -48,6 +48,23 @@ def insertValueRule(context, payoff, db):
     })
 
 
+def findInvolvement(agent, valRules):
+    Q = Query()
+    return valRules.search(Q.agents.any([agent]))
+
+
+def calculateLocalQ(agent, action, valRules):
+    involvement = findInvolvement(agent , valRules)
+    result = 0
+
+    for rule in involvement:
+        if action in rule["actions"]:
+            result =+ rule["payoff"] / len(rule["agents"])
+
+    return result
+
+
+#def updateValueRule(agent, action, valRule, valRules):
 
 
 
