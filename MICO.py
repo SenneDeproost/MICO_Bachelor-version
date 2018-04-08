@@ -28,11 +28,13 @@ def MICO_wind(config, wind):
     g.printStat("   Wind blows " + str(wind["angle"]) + " degrees with a speed of " + str(wind["speed"]) + " m/s")
 
     infra = i.loadInfrastructureDB(config)
-    CG = cg.createCG(infra, wind)
-    valueRules = cg.createValueRulesDB(config)
-    nTurbines = len(CG)
+
+    nTurbines = len(infra)
     nActions = range(360*nTurbines)
     nEpisodes = 10
+
+    CG = cg.createCG(infra, nActions, wind)
+
 
     for episode in xrange(nEpisodes):
         print episode
