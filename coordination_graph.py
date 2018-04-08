@@ -1,5 +1,6 @@
-import networkx as nx
 from tinydb import TinyDB, Query
+import networkx as nx
+import numpy as np
 import globals as g
 import wind_dependencies as dep
 import wind_rewards as rw
@@ -36,6 +37,26 @@ def validFormat(file, extension):
     return file.endswith(extension)
 
 
+# Find the OJA (Optimal Joint Action) in the CG by using variable elimination
+def findOJA(valRules, CG):
+    graph = CG.copy()
+    variables = graph.nodes()
+    counter = len(variables)
+
+    while counter > 1:
+        neighbors = graph.neighbors()
+
+
+
+
+
+
+
+
+
+
+
+
 # A context is an array of objects with a agent and an action field
 def insertValueRule(context, payoff, db):
     agents = context["agents"]
@@ -48,9 +69,9 @@ def insertValueRule(context, payoff, db):
     })
 
 
-def findInvolvement(agent, valRules):
+def findInvolvement(agentList, valRules):
     Q = Query()
-    return valRules.search(Q.agents.any([agent]))
+    return valRules.search(Q.agents.any([agentList]))
 
 
 def calculateLocalQ(agent, action, valRules):
@@ -64,8 +85,23 @@ def calculateLocalQ(agent, action, valRules):
     return result
 
 
-#def updateValueRule(agent, action, valRule, valRules):
+ #def updateValueRule(agent, action, valRule, valRules):
+    # agents = valRule["agents"]
+    # actions = valRule["actions"]
 
+
+
+
+
+    # reward =
+
+
+    # valRule.payoff = newPayoff
+
+
+
+
+    # valRules.write_back(updatedRule)
 
 
 
