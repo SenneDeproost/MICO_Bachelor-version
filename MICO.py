@@ -30,18 +30,19 @@ def MICO_wind(config, wind):
     infra = i.loadInfrastructureDB(config)
 
     nTurbines = len(infra)
-    nActions = range(360*nTurbines)
+    nActions = 360
     nEpisodes = 10
 
     CG = cg.createCG(infra, nActions, wind)
 
+#    CG[1]['qFunction']
+
 
     for episode in xrange(nEpisodes):
-        print episode
 
         # Find optimal joint action (OJA) using variable elimination
 
-        #cg.findOJA(CG, valueRules)
+        cg.findOJA(CG, nActions)
 
         # Chose an action ALPHA with epsilon greedy (or a random action)
 
@@ -54,4 +55,4 @@ def MICO_wind(config, wind):
 
 g.printStat("Done loading modules")
 
-MICO_wind("sinpark.json", wind)
+MICO_wind("testpark.json", wind)

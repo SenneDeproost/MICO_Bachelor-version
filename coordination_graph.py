@@ -13,15 +13,15 @@ def createCG(database, nActions, *parameters):
     entities = database.all()
     for entity in entities:
         g.printStat("   Adding node " + str(entity["id"]) + " to CG")
-        cg.add_node(entity["id"],
-                    data=entity,
-                    qFunction=np.zeros([nActions, nActions]))
+        cg.add_node(entity["id"], qFunction=5555)
+        #cg[entity["id"]]['qFunctiiiiiion'] = np.zeros([nActions, nActions])
         for other in entities:
-            if dep.dependsOn(entity, other, parameters)
-            and entity["id"] != other["id"]:
-                cg.add_edge(entity["id"], other["id"],
-                            valRules=np.zeros([nActions, nActions])) # Row = cur
+            if dep.dependsOn(entity, other, parameters) and entity["id"] != other["id"]:
+                cg.add_edge(entity["id"], other["id"],) # Row = cur
+    nx.set_node_attributes(cg, 'qFunction', np.zeros([nActions, nActions]))
+    nx.set_edge_attributes(cg, 'valRules', np.zeros([nActions, nActions]))
     g.printStat("   Dependencies found: " + str(cg.edges()))
+    print cg[cg.nodes()[1]]
     return cg
 
 # A context is an array of objects with a agent and an action field
@@ -54,57 +54,95 @@ def localQVal(agent, action,  cg):
     return result / len(involvement)
 
 
+# nx.add_edges_from doesn't do the job, so an own algorithm will fix it.
+def own_copy(original):
+    new = original.copy()
+    nodes = new.nodes()
+
+    for node in nodes:
+        outs = original.out_edges(original[node])
+        ins = original.in_edges(original[node])
+        new.add_node(node)
+        new.add_edges_from(outs)
+        new.add_edges_from(ins)
+        print original[node]
+        node['qFunction'] = original[node]['qFunction']
+
+    return new
+
+
 # Find the Optimal Joint Action (at the moment for 3 node involvment)
-def findOJA(cg):
+def findOJA(cg, nActions):
+    graph = nx.DiGraph() # Don't use graph cg.copy()!
+    #graph.add_nodes_from(cg)
+    #graph.add_edges_from(cg.edges())
     graph = cg.copy()
+
+    print graph[2]
+
     counter = len(graph)
 
-    while counter > 1:
-        node = graph[counter]
-        neighbors = neighbors(counter)
-        neighborQFuncs = map(lambda x: graph[x]['qFunction'] , neighbors)
+    while counter > 1: # Process all nodes except one
+        outs = cg.out_edges(counter)
+        ins = cg.in_edges(counter)
 
-        influenced = graph[graph.out_edges(counter)[0][1]]
-        influencer = graph[graph.in_edges(counter)[0][0]]
+        hasInfluenced = None
+        hasInfluencer = None
 
-        influencedActions = range(0, len(influenced['qFunction']))
-        influencerActions = range(0, len(influencer['qFunction']))
+        if len(outs) != 0:
+            hasInfluenced = outs[0][1]
 
-        nActions = len(influencedActions * influencerActions)
+        if len(ins) != 0:
+            hasInfluencer = ins[0][0]
 
-        internalMaxFun = np.zeros([len(influencedActions), len(influencerActions)])
 
-        # For every action of the influenced en the influencer, the internalMaxFun
-        # returns the maximum of the sum of the Q values from the local Q function
-        # of the influenced variable and the Q function of the eliminated one.
-        for a1 in influencedActions:
-            for a2 in inflerAction:
-                result = max(np.add((influencedActions[a1],
-                                    (influencerActions[a2]))))
-                internalMaxFun[inflcedAction][inflencerAction] = result
+        # Check if the variable has a influencer. If not, it is a Independent
+        # Learner (IL).
+        if not hasInfluencer:
+            if hasInfluenced:
+                print hasInfluenced
+                graph.remove_edge(counter, hasInfluenced)
+            #graph.remove_node(counter)
 
-        # Eliminate the variable
-        graph.add_edge(
-        graph.in_edges(counter)[0][0],
-        graph.outedges(counter)[0][1]
-        )
+        # The multi-agent approach
+        if hasInfluencer:
+            internalMaxFun = np.zeros([nActions, nActions])
+            actions = range(0, nActions)
 
-        graph.remove_edge(graph.in_edges[0])
-        graph.remove_edge(graph.out_edges[0])
+            print 1111
+            print graph.nodes()
+            print 1111
+            influencedActions = graph.node[hasInfluenced]['qFunction']
+            influencerActions = graph.node[hasInfluencer]['qFunction']
 
-        graph.remove_node(counter)
+            # For every action of the influenced en the influencer, the
+            # internalMaxFun returns the maximum of the sum of the Q values from
+            # the local Q function of the influenced variable and the Q function
+            # of the eliminated one.
+            for a1 in actions:
+                for a2 in actions:
+                    result = max(np.add((influencedActions[a1],
+                                        (influencerActions[a2]))))
+                    graph.node[hasInfluenced]['internalMaxFun'][a1][a2] = result
 
+
+            # Eliminate the variable and it's edges
+            graph.remove_edge(hasInfluencer, counter)
+            graph.remove_edge(counter, hasInfluenced)
+            #graph.remove_node(counter)
+
+            # Decrease counter
         counter -= 1
 
     # When all but one of the variables is eliminated, the optmal action of
     # of the only variable left is calculated with max(internalMaxFun(action)).
     # To calculate the optimal actions of the other variables, the algoritme
     # traverses the graph backwards.
-    counter = len(graph)
+    counter = len(cg)
     optimalActions = []
 
-    for counter > 0:
-        optimalActions.append(graph[counter]['internalMaxFun'])
+    while counter > 0:
+        optimalActions.append(graph.node[counter]['internalMaxFun'])
         counter -= 1
-
+    print optimalActions
     return optimalActions

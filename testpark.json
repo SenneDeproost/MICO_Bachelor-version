@@ -3,7 +3,7 @@
     "model": "NREL 5MW",
     "location":
     {
-      "x": 100,
+      "x": 200,
       "y": 10
     },
     "yaw": 0
