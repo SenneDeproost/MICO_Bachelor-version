@@ -41,7 +41,7 @@ def findInvolvement(agents, cg):
 
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-def localQVal(agent, action,  cg):
+def localQVal(agents, actions,  cg):
     involvement = findInvolvement(agent , cg) # List of edges (a, b)
     valRules = []
     result = 0
@@ -53,30 +53,11 @@ def localQVal(agent, action,  cg):
 
     return result / len(involvement)
 
-
-# nx.add_edges_from doesn't do the job, so an own algorithm will fix it.
-def own_copy(original):
-    new = original.copy()
-    nodes = new.nodes()
-
-    for node in nodes:
-        outs = original.out_edges(original[node])
-        ins = original.in_edges(original[node])
-        new.add_node(node)
-        new.add_edges_from(outs)
-        new.add_edges_from(ins)
-        print original[node]
-        node['qFunction'] = original[node]['qFunction']
-
-    return new
-
-
-# Find the Optimal Joint Action (at the moment for 3 node involvment)
+# Find the Optimal Joint Action (at the moment for 3 node involvment max)
 def findOJA(cg, nActions):
     graph = cg.copy()
     nx.set_node_attributes(graph, 'internalMaxFun', np.zeros([nActions]))
-
-    print graph[2]
+    actions = range(0, nActions)
 
     counter = len(graph)
 
@@ -87,10 +68,10 @@ def findOJA(cg, nActions):
         hasInfluenced = None
         hasInfluencer = None
 
-        if len(outs) != 0:
+        if len(outs) > 0:
             hasInfluenced = outs[0][1]
 
-        if len(ins) != 0:
+        if len(ins) > 0:
             hasInfluencer = ins[0][0]
 
 
@@ -103,13 +84,8 @@ def findOJA(cg, nActions):
 
         # The multi-agent approach
         if hasInfluencer:
-            internalMaxFun = np.zeros([nActions, nActions])
-            actions = range(0, nActions)
-
             influencerActions = graph.node[hasInfluencer]['qFunction']
-
             influencedActions = np.zeros([nActions, nActions])
-
             if hasInfluenced:
                 influencerActions = graph.node[hasInfluencer]['qFunction']
 
@@ -117,19 +93,22 @@ def findOJA(cg, nActions):
             # internalMaxFun returns the maximum of the sum of the Q values from
             # the local Q function of the influenced variable and the Q function
             # of the eliminated one.
-            for a1 in actions:
-                for a2 in actions:
-                    result = max(np.add(influencedActions[a1],
-                                        influencerActions[a2]))
-                    graph.node[hasInfluenced]['internalMaxFun'][a1] = result
 
 
-            # Eliminate the variable and it's edges
-            graph.remove_edge(hasInfluencer, counter)
-            graph.remove_edge(counter, hasInfluenced)
-            #graph.remove_node(counter)
 
-            # Decrease counter
+                for a1 in actions:
+                    for a2 in actions:
+                        result = max(np.add(influencedActions[a1],
+                                            influencerActions[a2]))
+                        graph.node[hasInfluenced]['internalMaxFun'][a1] = result
+
+
+                # Eliminate the variable and it's edges
+                graph.remove_edge(hasInfluencer, counter)
+                graph.remove_edge(counter, hasInfluenced)
+                #graph.remove_node(counter)
+
+                                            # Decrease counter
         counter -= 1
 
     # When all but one of the variables is eliminated, the optmal action of

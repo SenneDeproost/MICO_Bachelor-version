@@ -41,7 +41,7 @@ class CPCT_Interpolate(Component):
         #print "first speed, first CT", self.windSpeedToCPCT.wind_speed[0], self.windSpeedToCPCT.CT[0], self.windSpeedToCPCT.CT[1]
         #print "last speed, last CT", self.windSpeedToCPCT.wind_speed[-1], self.windSpeedToCPCT.CP[-1]
         #print "pP: ", self.pP
-        wind_speed_ax = np.cos(self.yaw*np.pi/180.0)**(self.pP/3.0)*self.wind_speed_hub
+        wind_speed_ax = abs(np.cos(self.yaw*np.pi/180.0))**(self.pP/3.0)*self.wind_speed_hub # Using abs function
         # use interpolation on precalculated CP-CT curve
         wind_speed_ax = np.maximum(wind_speed_ax, self.windSpeedToCPCT.wind_speed[0])
         wind_speed_ax = np.minimum(wind_speed_ax, self.windSpeedToCPCT.wind_speed[-1])
@@ -49,7 +49,7 @@ class CPCT_Interpolate(Component):
         self.CT = interp(wind_speed_ax, self.windSpeedToCPCT.wind_speed, self.windSpeedToCPCT.CT)
 
         # normalize on incoming wind speed to correct coefficients for yaw
-        self.CP = self.CP * np.cos(self.yaw*np.pi/180.0)**self.pP
+        self.CP = self.CP * abs(np.cos(self.yaw*np.pi/180.0))**self.pP # Using abs function
         self.CT = self.CT * np.cos(self.yaw*np.pi/180.0)**2
 
         #print "in rotor, Cp = ", self.CP

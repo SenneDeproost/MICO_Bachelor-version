@@ -5,3 +5,4 @@
 * Setup.py of AirfoilPreppy (see LINE 14: package_data: {'airfoilprep': []} -> package_data={'airfoilprep': []})
 * On line 176 in florisOptimization.py: ySamplzes -> ySamples
 * Disabled printing in rotor_components.py lines [41 - 43] and [55 - 57]
+* rotor_components.py in FLORIS_SE, on line 44 and 52, the abs() function is used to prevent a negative cosinus for the exponent.
