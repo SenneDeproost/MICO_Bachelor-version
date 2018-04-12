@@ -73,10 +73,8 @@ def own_copy(original):
 
 # Find the Optimal Joint Action (at the moment for 3 node involvment)
 def findOJA(cg, nActions):
-    graph = nx.DiGraph() # Don't use graph cg.copy()!
-    #graph.add_nodes_from(cg)
-    #graph.add_edges_from(cg.edges())
     graph = cg.copy()
+    nx.set_node_attributes(graph, 'internalMaxFun', np.zeros([nActions]))
 
     print graph[2]
 
@@ -100,7 +98,6 @@ def findOJA(cg, nActions):
         # Learner (IL).
         if not hasInfluencer:
             if hasInfluenced:
-                print hasInfluenced
                 graph.remove_edge(counter, hasInfluenced)
             #graph.remove_node(counter)
 
@@ -109,11 +106,12 @@ def findOJA(cg, nActions):
             internalMaxFun = np.zeros([nActions, nActions])
             actions = range(0, nActions)
 
-            print 1111
-            print graph.nodes()
-            print 1111
-            influencedActions = graph.node[hasInfluenced]['qFunction']
             influencerActions = graph.node[hasInfluencer]['qFunction']
+
+            influencedActions = np.zeros([nActions, nActions])
+
+            if hasInfluenced:
+                influencerActions = graph.node[hasInfluencer]['qFunction']
 
             # For every action of the influenced en the influencer, the
             # internalMaxFun returns the maximum of the sum of the Q values from
@@ -121,9 +119,9 @@ def findOJA(cg, nActions):
             # of the eliminated one.
             for a1 in actions:
                 for a2 in actions:
-                    result = max(np.add((influencedActions[a1],
-                                        (influencerActions[a2]))))
-                    graph.node[hasInfluenced]['internalMaxFun'][a1][a2] = result
+                    result = max(np.add(influencedActions[a1],
+                                        influencerActions[a2]))
+                    graph.node[hasInfluenced]['internalMaxFun'][a1] = result
 
 
             # Eliminate the variable and it's edges
@@ -142,7 +140,6 @@ def findOJA(cg, nActions):
     optimalActions = []
 
     while counter > 0:
-        optimalActions.append(graph.node[counter]['internalMaxFun'])
+        optimalActions.append(np.array(graph.node[counter]['internalMaxFun']).argmax())
         counter -= 1
-    print optimalActions
     return optimalActions

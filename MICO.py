@@ -5,23 +5,27 @@
 # *************************************************************************** #
 
 from sys import argv
+import random as r
+import numpy as np
+from tinydb import TinyDB, Query
 import globals as g
 import infrastructure as i
 import coordination_graph as cg
 import banner as b
+import WISDEM.FLORIS_SE.NREL5_calc as f
 
 b.printBanner()
 
 args = argv
 argc = len(args)
 
-epsilon = 0.1
+epsilon = 0.9
 learningRate = 0.9
 discount = 0.9
 
 extension = ".json"
 
-wind = {"angle": 180, "speed": 8.1}
+wind = {"angle": 0, "speed": 8.1}
 
 def MICO_wind(config, wind):
     g.printStat("Starting MICO_wind with " + config + " as configuration")
@@ -31,25 +35,46 @@ def MICO_wind(config, wind):
 
     nTurbines = len(infra)
     nActions = 360
-    nEpisodes = 10
+    nEpisodes = 1
 
     CG = cg.createCG(infra, nActions, wind)
-
-#    CG[1]['qFunction']
-
 
     for episode in xrange(nEpisodes):
 
         # Find optimal joint action (OJA) using variable elimination
 
-        cg.findOJA(CG, nActions)
+        OJA = cg.findOJA(CG, nActions)
+        print OJA
 
-        # Chose an action ALPHA with epsilon greedy (or a random action)
+        # Chose the OJA action with a chance of (1 - epsilon) or chose a random
+        # action.
 
-        # Validate ALPHA in WISDEM and receive the powerproductions
+        jointAction = None
+
+        if r.random() < (1 - epsilon):
+            print "TIS DEN OJA!"
+            jointAction = OJA
+        else:
+            jointAction =  np.random.randint(nActions, size=nTurbines)
+
+        # Validate jointAction in WISDEM and receive the power productions
+
+        powerProductions = np.zeros([nTurbines, nTurbines])
+        Q = Query()
+
+        for edge in CG.edges():
+            turbine1 = infra.search(Q.id == edge[0])[0]
+            turbine2 = infra.search(Q.id == edge[0])[0]
+            turbine1["yaw"] = jointAction[edge[0]]
+            turbine2["yaw"] = jointAction[edge[1]]
+            production = f.calcProduction(wind, [turbine1, turbine2])
+            powerProductions[edge[0], edge[1]] = production
+
+
+
 
         # Update the value rules
-
+        print powerProductions
 
     g.printStat("Done!")
 
