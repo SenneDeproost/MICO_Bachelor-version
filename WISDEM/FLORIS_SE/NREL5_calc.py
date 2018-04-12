@@ -45,7 +45,6 @@ def calcProduction(wind, turbines):
     turbineYaw = []
 
     for turbine in turbines:
-        print turbine
         turbineX.append(turbine["location"]["x"])
         turbineY.append(turbine["location"]["y"])
         turbineYaw.append(turbine["yaw"])

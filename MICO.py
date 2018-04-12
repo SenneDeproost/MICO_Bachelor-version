@@ -25,7 +25,7 @@ discount = 0.9
 
 extension = ".json"
 
-wind = {"angle": 0, "speed": 8.1}
+wind = {"angle": 180, "speed": 8.1}
 
 def MICO_wind(config, wind):
     g.printStat("Starting MICO_wind with " + config + " as configuration")
@@ -35,16 +35,19 @@ def MICO_wind(config, wind):
 
     nTurbines = len(infra)
     nActions = 360
-    nEpisodes = 1
+    nEpisodes = 5
 
     CG = cg.createCG(infra, nActions, wind)
 
-    for episode in xrange(nEpisodes):
+    g.printStat("Starting learning session: " + str(nEpisodes) + " episodes")
+
+    for episode in xrange(1, nEpisodes + 1):
+
+        g.printStat("   Episode " + str(episode))
 
         # Find optimal joint action (OJA) using variable elimination
 
         OJA = cg.findOJA(CG, nActions)
-        print OJA
 
         # Chose the OJA action with a chance of (1 - epsilon) or chose a random
         # action.
@@ -52,10 +55,11 @@ def MICO_wind(config, wind):
         jointAction = None
 
         if r.random() < (1 - epsilon):
-            print "TIS DEN OJA!"
             jointAction = OJA
         else:
             jointAction =  np.random.randint(nActions, size=nTurbines)
+
+        g.printStat("       Joint action: " + str(jointAction))
 
         # Validate jointAction in WISDEM and receive the power productions
 
@@ -64,17 +68,17 @@ def MICO_wind(config, wind):
 
         for edge in CG.edges():
             turbine1 = infra.search(Q.id == edge[0])[0]
-            turbine2 = infra.search(Q.id == edge[0])[0]
+            turbine2 = infra.search(Q.id == edge[1])[0]
             turbine1["yaw"] = jointAction[edge[0]]
             turbine2["yaw"] = jointAction[edge[1]]
             production = f.calcProduction(wind, [turbine1, turbine2])
             powerProductions[edge[0], edge[1]] = production
 
+            # Update value rules
+            valRules = CG.edge[edge[0]][edge[1]]["valRules"]
+            valRules[turbine1["yaw"]][turbine2["yaw"]] = production
 
-
-
-        # Update the value rules
-        print powerProductions
+        g.printStat("       Total power production: " + str(powerProductions.sum()))
 
     g.printStat("Done!")
 

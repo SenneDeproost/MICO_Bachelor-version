@@ -21,7 +21,6 @@ def createCG(database, nActions, *parameters):
     nx.set_node_attributes(cg, 'qFunction', np.zeros([nActions, nActions]))
     nx.set_edge_attributes(cg, 'valRules', np.zeros([nActions, nActions]))
     g.printStat("   Dependencies found: " + str(cg.edges()))
-    print cg[cg.nodes()[1]]
     return cg
 
 # A context is an array of objects with a agent and an action field
