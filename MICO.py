@@ -19,10 +19,6 @@ b.printBanner()
 args = argv
 argc = len(args)
 
-epsilon = 0.9
-learningRate = 0.9
-discount = 0.9
-
 extension = ".json"
 
 wind = {"angle": 180, "speed": 8.1}
@@ -41,7 +37,7 @@ def MICO_wind(config, wind):
 
     g.printStat("Starting learning session: " + str(nEpisodes) + " episodes")
 
-    for episode in xrange(1, nEpisodes + 1):
+    for episode in xrange(1, 1 + nEpisodes):
 
         g.printStat("   Episode " + str(episode))
 
@@ -54,7 +50,7 @@ def MICO_wind(config, wind):
 
         jointAction = None
 
-        if r.random() < (1 - epsilon):
+        if r.random() < (1 - g.epsilon):
             jointAction = OJA
         else:
             jointAction =  np.random.randint(nActions, size=nTurbines)
@@ -72,11 +68,18 @@ def MICO_wind(config, wind):
             turbine1["yaw"] = jointAction[edge[0]]
             turbine2["yaw"] = jointAction[edge[1]]
             production = f.calcProduction(wind, [turbine1, turbine2])
-            powerProductions[edge[0], edge[1]] = production
 
-            # Update value rules
-            valRules = CG.edge[edge[0]][edge[1]]["valRules"]
-            valRules[turbine1["yaw"]][turbine2["yaw"]] = production
+            # Update productions
+            productions = CG.edge[edge[0]][edge[1]]["productions"]
+            productions[turbine1["yaw"]][turbine2["yaw"]] = production
+
+            # Update valRules
+            discSum = cg.discountedSum(edge, [jointAction[edge[0]], jointAction[edge[1]]], OJA, CG)
+            valRules = edge['valRules']
+            adjustedProduction = valRules[edge[0]][edge[1]] + discSum
+            valRules[edge[0], edge[1]] = adjustedProduction
+
+
 
         g.printStat("       Total power production: " + str(powerProductions.sum()))
 

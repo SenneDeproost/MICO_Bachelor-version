@@ -19,6 +19,7 @@ def createCG(database, nActions, *parameters):
             if dep.dependsOn(entity, other, parameters) and entity["id"] != other["id"]:
                 cg.add_edge(entity["id"], other["id"],) # Row = cur
     nx.set_node_attributes(cg, 'qFunction', np.zeros([nActions, nActions]))
+    nx.set_edge_attributes(cg, 'productions', np.zeros([nActions, nActions]))
     nx.set_edge_attributes(cg, 'valRules', np.zeros([nActions, nActions]))
     g.printStat("   Dependencies found: " + str(cg.edges()))
     return cg
@@ -39,8 +40,7 @@ def findInvolvement(agents, cg):
     return result
 
 
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-def localQVal(agents, actions,  cg):
+def localQVal(agent, action, cg):
     involvement = findInvolvement(agent , cg) # List of edges (a, b)
     valRules = []
     result = 0
@@ -51,6 +51,35 @@ def localQVal(agents, actions,  cg):
         result =+ np.sum(valRules[action, :])
 
     return result / len(involvement)
+
+# Discounted sum for the involvement of two agents
+def discountedSum(edge, actions, oja, cg):
+    agent1 = cg.nodes[edge[0]]
+    agent2 = cg.nodes[edge[1]]
+    action1 = actions[0]
+    action2 = actions[1]
+    productions = edge['productions']
+
+    production1 = productions[:, 0][action1]
+    production2 = productions[0, :][action2]
+
+    optiQ1 = localQVal(agent1, oja[agent1], cg)
+    optiQ2 = localQVal(agent2, oja[agent2], cg)
+
+    localQ1 = localQVal(agent1, action1, cg)
+    localQ2 = localQVal(agent2, action2, cg)
+
+    updatedLocalQ1 = production1 + g.gamma*optiQ1 - localQ1
+    updatedLocalQ2 = production2 + g.gamma*optiQ2 - localQ2
+
+    # Assign new found Q's
+    agent1['qFunction'][action1] = updatedLocalQ1
+    agent2['qFunction'][action2] = updatedLocalQ2
+
+    summ = updatedLocalQ1 + updatedLocalQ2
+
+    return g.discount*summ
+
 
 # Find the Optimal Joint Action (at the moment for 3 node involvment max)
 def findOJA(cg, nActions):

@@ -2,9 +2,10 @@ import json
 #commands = json.load(open("commands.json"))
 #global_vars = json.load(open("variables.json"))
 
-epsilon = 0.1
-learningRate = 0
+gamma = 0.9
+learningRate = 0.9
 discount = 0.9
+epsilon = 0.9
 
 def printStat(message):
     print("[*] " + message)
