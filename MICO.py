@@ -68,6 +68,7 @@ def MICO_wind(config, wind):
             turbine1["yaw"] = jointAction[edge[0]]
             turbine2["yaw"] = jointAction[edge[1]]
             production = f.calcProduction(wind, [turbine1, turbine2])
+            powerProductions[edge[0]][edge[1]] = production
 
             # Update productions
             productions = CG.edge[edge[0]][edge[1]]["productions"]
@@ -75,7 +76,8 @@ def MICO_wind(config, wind):
 
             # Update valRules
             discSum = cg.discountedSum(edge, [jointAction[edge[0]], jointAction[edge[1]]], OJA, CG)
-            valRules = edge['valRules']
+            valRules = CG[edge[0]][edge[1]]['valRules']
+
             adjustedProduction = valRules[edge[0]][edge[1]] + discSum
             valRules[edge[0], edge[1]] = adjustedProduction
 
