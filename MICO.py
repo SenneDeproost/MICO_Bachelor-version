@@ -31,7 +31,7 @@ def MICO_wind(config, wind):
 
     nTurbines = len(infra)
     nActions = 360
-    nEpisodes = 5
+    nEpisodes = 20000
 
     CG = cg.createCG(infra, nActions, wind)
 
@@ -52,8 +52,10 @@ def MICO_wind(config, wind):
 
         if r.random() < (1 - g.epsilon):
             jointAction = OJA
+            g.printStat("       Using OJA")
         else:
-            jointAction =  np.random.randint(nActions, size=nTurbines)
+            jointAction = map(lambda x: r.randint(-10, 10), np.zeros(nTurbines))
+            g.printStat("       Using random action")
 
         g.printStat("       Joint action: " + str(jointAction))
 
@@ -65,8 +67,10 @@ def MICO_wind(config, wind):
         for edge in CG.edges():
             turbine1 = infra.search(Q.id == edge[0])[0]
             turbine2 = infra.search(Q.id == edge[1])[0]
-            turbine1["yaw"] = jointAction[edge[0]]
-            turbine2["yaw"] = jointAction[edge[1]]
+            originalYaw1 = turbine1["yaw"]
+            originalYaw2 = turbine2["yaw"]
+            turbine1["yaw"] = originalYaw1 + jointAction[edge[0]]
+            turbine2["yaw"] = originalYaw2 + jointAction[edge[1]]
             production = f.calcProduction(wind, [turbine1, turbine2])
             powerProductions[edge[0]][edge[1]] = production
 
