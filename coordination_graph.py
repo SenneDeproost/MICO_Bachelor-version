@@ -46,8 +46,8 @@ def localQVal(agent, action, cg):
 
     for edge in involvement:
         valRules = cg[edge[0]][edge[1]]['valRules']
-        result =+ np.sum(valRules[:, action])
-        result =+ np.sum(valRules[action, :])
+        result += np.sum(valRules[:, action])
+        result += np.sum(valRules[action, :])
 
     return result / len(involvement)
 
@@ -72,8 +72,8 @@ def discountedSum(edge, actions, oja, cg):
     updatedLocalQ2 = production2 + g.gamma*optiQ2 - localQ2
 
     # Assign new found Q's
-    cg.node[agent1]['qFunction'][action1] = updatedLocalQ1
-    cg.node[agent2]['qFunction'][action2] = updatedLocalQ2
+    cg.node[agent1]['qFunction'][action1][action2] = updatedLocalQ1
+    cg.node[agent2]['qFunction'][action2][action1] = updatedLocalQ2
 
     summ = updatedLocalQ1 + updatedLocalQ2
 
@@ -114,7 +114,7 @@ def findOJA(cg, nActions):
             influencerActions = graph.node[hasInfluencer]['qFunction']
             influencedActions = np.zeros([nActions, nActions])
             if hasInfluenced:
-                influencerActions = graph.node[hasInfluencer]['qFunction']
+                influencedActions = graph.node[hasInfluencer]['qFunction']
 
             # For every action of the influenced en the influencer, the
             # internalMaxFun returns the maximum of the sum of the Q values from

@@ -54,7 +54,7 @@ def MICO_wind(config, wind):
             jointAction = OJA
             g.printStat("       Using OJA")
         else:
-            jointAction = map(lambda x: r.randint(-10, 10), np.zeros(nTurbines))
+            jointAction = map(lambda x: r.randint(-1, 1), np.zeros(nTurbines))
             g.printStat("       Using random action")
 
         g.printStat("       Joint action: " + str(jointAction))
@@ -71,12 +71,14 @@ def MICO_wind(config, wind):
             originalYaw2 = turbine2["yaw"]
             turbine1["yaw"] = originalYaw1 + jointAction[edge[0]]
             turbine2["yaw"] = originalYaw2 + jointAction[edge[1]]
+
             production = f.calcProduction(wind, [turbine1, turbine2])
             powerProductions[edge[0]][edge[1]] = production
 
             # Update productions
             productions = CG.edge[edge[0]][edge[1]]["productions"]
             productions[turbine1["yaw"]][turbine2["yaw"]] = production
+            #print production
 
             # Update valRules
             discSum = cg.discountedSum(edge, [jointAction[edge[0]], jointAction[edge[1]]], OJA, CG)
