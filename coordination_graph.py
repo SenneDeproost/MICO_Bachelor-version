@@ -142,6 +142,10 @@ def findOJA(cg, nActions):
     counter = len(cg)
     optimalActions = []
 
+
+
+    # !!!!!!!!!
+
     while counter > 0:
         optimalActions.append(np.array(graph.node[counter]['internalMaxFun']).argmax())
         counter -= 1

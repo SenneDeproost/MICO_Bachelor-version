@@ -31,7 +31,7 @@ def MICO_wind(config, wind):
 
     nTurbines = len(infra)
     nActions = 60
-    nEpisodes = 2
+    nEpisodes = 200
 
     CG = cg.createCG(infra, nActions, wind)
 
