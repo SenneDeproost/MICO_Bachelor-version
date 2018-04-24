@@ -14,9 +14,9 @@ logName = str(time.time()) + ".log"
 
 def printStat(message):
     print("[*] " + message)
-    file = open("logs/" + logName, 'a')
-    file.write("[*] " + message + "\n")
-    file.close()
+    #file = open("logs/" + logName, 'a')
+    #file.write("[*] " + message + "\n")
+    #file.close()
 
 
 def raiseError(function, message):
