@@ -30,8 +30,8 @@ def MICO_wind(config, wind):
     infra = i.loadInfrastructureDB(config)
 
     nTurbines = len(infra)
-    nActions = 360
-    nEpisodes = 20000
+    nActions = 60
+    nEpisodes = 2
 
     CG = cg.createCG(infra, nActions, wind)
 
@@ -54,7 +54,7 @@ def MICO_wind(config, wind):
             jointAction = OJA
             g.printStat("       Using OJA")
         else:
-            jointAction = map(lambda x: r.randint(-1, 1), np.zeros(nTurbines))
+            jointAction = map(lambda x: r.randint(-30, 30), np.zeros(nTurbines))
             g.printStat("       Using random action")
 
         g.printStat("       Joint action: " + str(jointAction))
