@@ -1,5 +1,5 @@
 from tinydb import TinyDB, Query
-from matplotlib import pyplot as plt
+#from matplotlib import pyplot as plt
 import globals as g
 import json as j
 import os.path
