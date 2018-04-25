@@ -54,7 +54,7 @@ def MICO_wind(config, wind):
             jointAction = OJA
             g.printStat("       Using OJA")
         else:
-            jointAction = map(lambda x: r.randint(-30, 30), np.zeros(nTurbines))
+            jointAction = map(lambda x: r.randint(-3, 3) * 5, np.zeros(nTurbines))
             g.printStat("       Using random action")
 
         g.printStat("       Joint action: " + str(jointAction))

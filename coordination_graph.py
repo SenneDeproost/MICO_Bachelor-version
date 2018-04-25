@@ -13,11 +13,10 @@ def createCG(database, nActions, *parameters):
     entities = database.all()
     for entity in entities:
         g.printStat("   Adding node " + str(entity["id"]) + " to CG")
-        cg.add_node(entity["id"], qFunction=5555)
-        #cg[entity["id"]]['qFunctiiiiiion'] = np.zeros([nActions, nActions])
+        cg.add_node(entity["id"])
         for other in entities:
             if dep.dependsOn(entity, other, parameters) and entity["id"] != other["id"]:
-                cg.add_edge(entity["id"], other["id"],) # Row = cur
+                cg.add_edge(entity["id"], other["id"]) # Row = cur
     nx.set_node_attributes(cg, 'qFunction', np.zeros([nActions, nActions]))
     nx.set_edge_attributes(cg, 'productions', np.zeros([nActions, nActions]))
     nx.set_edge_attributes(cg, 'valRules', np.zeros([nActions, nActions]))
@@ -27,7 +26,6 @@ def createCG(database, nActions, *parameters):
 # A context is an array of objects with a agent and an action field
 def changeValueRule(agents, actions, newVal, cg):
     cg[agents[0]][agents[1]]['valRules'][actions[0]][actions[1]] = newVal
-
 
 # Needs optimalization
 def findInvolvement(agent, cg):
