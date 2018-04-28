@@ -13,13 +13,13 @@ def createCG(database, nActions, *parameters):
     entities = database.all()
     for entity in entities:
         g.printStat("   Adding node " + str(entity["id"]) + " to CG")
-        cg.add_node(entity["id"])
+        cg.add_node(entity["id"], qFunction=np.zeros([nActions, nActions]))
         for other in entities:
             if dep.dependsOn(entity, other, parameters) and entity["id"] != other["id"]:
-                cg.add_edge(entity["id"], other["id"]) # Row = cur
-    nx.set_node_attributes(cg, 'qFunction', np.zeros([nActions, nActions]))
-    nx.set_edge_attributes(cg, 'productions', np.zeros([nActions, nActions]))
-    nx.set_edge_attributes(cg, 'valRules', np.zeros([nActions, nActions]))
+                cg.add_edge(entity["id"], other["id"], produtions=np.zeros([nActions, nActions]), valRules=np.zeros([nActions, nActions])) # Row = cur
+    #nx.set_node_attributes(cg, 'qFunction', np.zeros([nActions, nActions]))
+    #nx.set_edge_attributes(cg, 'productions', np.zeros([nActions, nActions]))
+    #nx.set_edge_attributes(cg, 'valRules', np.zeros([nActions, nActions]))
     g.printStat("   Dependencies found: " + str(cg.edges()))
     return cg
 
@@ -29,12 +29,10 @@ def changeValueRule(agents, actions, newVal, cg):
 
 # Needs optimalization
 def findInvolvement(agent, cg):
-    edges = cg.edges()
-    result = []
-    for edge in edges:
-        if agent in edge:
-            result.append(edge)
-    return result
+    edges = []
+    edges.append(cg.in_edges(agent))
+    edges.append(cg.out_edges(agent))
+    return edges
 
 
 def localQVal(agent, action, cg):
@@ -43,7 +41,7 @@ def localQVal(agent, action, cg):
     result = 0
 
     for edge in involvement:
-        valRules = cg[edge[0]][edge[1]]['valRules']
+        valRules = cg[edge[0]][edge[1]]['valRules'] #!!!!
         result += np.sum(valRules[:, action])
         result += np.sum(valRules[action, :])
 
@@ -81,14 +79,13 @@ def discountedSum(edge, actions, oja, cg):
 # Find the Optimal Joint Action (at the moment for 3 node involvment max)
 def findOJA(cg, nActions):
     graph = cg.copy()
-    nx.set_node_attributes(graph, 'internalMaxFun', np.zeros([nActions]))
     actions = range(0, nActions)
 
     counter = len(graph)
 
     while counter > 1: # Process all nodes except one
-        outs = cg.out_edges(counter)
-        ins = cg.in_edges(counter)
+        outs = list(graph.out_edges(counter))
+        ins = list(graph.in_edges(counter))
 
         hasInfluenced = None
         hasInfluencer = None
@@ -98,7 +95,6 @@ def findOJA(cg, nActions):
 
         if len(ins) > 0:
             hasInfluencer = ins[0][0]
-
 
         # Check if the variable has a influencer. If not, it is a Independent
         # Learner (IL).
@@ -122,7 +118,7 @@ def findOJA(cg, nActions):
                     for a2 in actions:
                         result = max(np.add(influencedActions[a1],
                                             influencerActions[a2]))
-                        graph.node[hasInfluenced]['internalMaxFun'][a1] = result
+                        graph.node[hasInfluenced]['qFunction'][a1] = result
 
 
                 # Eliminate the variable and it's edges
@@ -142,9 +138,9 @@ def findOJA(cg, nActions):
 
 
 
-    # !!!!!!!!!
+    # !!!!!!!!! Moet anders!
 
     while counter > 0:
-        optimalActions.append(np.array(graph.node[counter]['internalMaxFun']).argmax())
+        optimalActions.append(np.array(graph.node[counter]['qFunction']).argmax())
         counter -= 1
     return optimalActions

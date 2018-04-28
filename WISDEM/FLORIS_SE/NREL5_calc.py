@@ -40,6 +40,7 @@ wind = {"angle": 0, "speed": 8.1}
 
 def calcProduction(wind, turbines):
 
+
     turbineX = []
     turbineY = []
     turbineYaw = []
@@ -85,6 +86,6 @@ def calcProduction(wind, turbines):
 
     myFloris.run()
     baselinePower = np.sum(myFloris.floris_power_0.wt_power)
-    return baselinePower
+    return myFloris.floris_power_0.wt_power
 
 #calcProduction(wind, [a, b, c, d])

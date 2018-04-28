@@ -95,4 +95,4 @@ def MICO_wind(config, wind):
 
 g.printStat("Done loading modules")
 
-MICO_wind("testpark.json", wind)
+MICO_wind("three_park.json", wind)
