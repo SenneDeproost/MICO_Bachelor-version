@@ -36,7 +36,7 @@ def convertJsonToDB(file):
         db = TinyDB(db_name + extension)
         db.purge()
         g.printStat("   Old database purged")
-        counter = 1
+        counter = 1 # ID's start from 1
         for obj in data:
             obj["id"] = counter
             counter += 1

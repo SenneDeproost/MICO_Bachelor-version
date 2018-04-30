@@ -1,6 +1,6 @@
 # requirements list for floris
 numpy==1.12.1
 scipy==0.19.1
-NetworkX
+NetworkX==1.8
 TinyDB
 Sympy

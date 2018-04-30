@@ -6,7 +6,7 @@ import time
 gamma = 0.9
 learningRate = 0.9
 discount = 0.9
-epsilon = 0.5
+epsilon = 1
 
 logName = str(time.time()) + ".log"
 

@@ -16,7 +16,7 @@ def createCG(database, nActions, *parameters):
         cg.add_node(entity["id"], qFunction=np.zeros([nActions, nActions]))
         for other in entities:
             if dep.dependsOn(entity, other, parameters) and entity["id"] != other["id"]:
-                cg.add_edge(entity["id"], other["id"], produtions=np.zeros([nActions, nActions]), valRules=np.zeros([nActions, nActions])) # Row = cur
+                cg.add_edge(entity["id"], other["id"], productions=np.zeros([nActions, nActions]), valRules=np.zeros([nActions, nActions])) # Row = cur
     #nx.set_node_attributes(cg, 'qFunction', np.zeros([nActions, nActions]))
     #nx.set_edge_attributes(cg, 'productions', np.zeros([nActions, nActions]))
     #nx.set_edge_attributes(cg, 'valRules', np.zeros([nActions, nActions]))
@@ -75,6 +75,14 @@ def discountedSum(edge, actions, oja, cg):
 
     return g.discount*summ
 
+
+def argmaxMat(matrix):
+    rowmax = []
+    for row in matrix:
+        rowmax.append(np.argmax(row))
+	row = max(rowmax)
+	collom = np.argmax(rowmax)
+    return (collom, row)
 
 # Find the Optimal Joint Action (at the moment for 3 node involvment max)
 def findOJA(cg, nActions):
@@ -138,9 +146,12 @@ def findOJA(cg, nActions):
 
 
 
+
+
     # !!!!!!!!! Moet anders!
 
     while counter > 0:
-        optimalActions.append(np.array(graph.node[counter]['qFunction']).argmax())
+
+        #optimalActions.append(np.array(graph.node[counter]['qFunction']).argmax())
         counter -= 1
     return optimalActions
