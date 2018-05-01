@@ -30,9 +30,17 @@ def changeValueRule(agents, actions, newVal, cg):
 # Needs optimalization
 def findInvolvement(agent, cg):
     edges = []
-    edges.append(cg.in_edges(agent))
-    edges.append(cg.out_edges(agent))
-    return edges
+    ins = cg.in_edges(agent)
+    outs = cg.out_edges(agent)
+
+    if len(ins) > 0:
+        for edge in ins:
+            edges.append(ins)
+    if len(outs) > 0:
+        for edge in outs:
+            edges.append(outs)
+
+    return edges[0] # temp solution
 
 
 def localQVal(agent, action, cg):
@@ -42,8 +50,8 @@ def localQVal(agent, action, cg):
 
     for edge in involvement:
         valRules = cg[edge[0]][edge[1]]['valRules'] #!!!!
-        result += np.sum(valRules[:, action])
-        result += np.sum(valRules[action, :])
+        result += np.sum(valRules[:, g.actionIndex(action)])
+        result += np.sum(valRules[g.actionIndex(action), :])
 
     return result / len(involvement)
 
@@ -51,15 +59,16 @@ def localQVal(agent, action, cg):
 def discountedSum(edge, actions, oja, cg):
     agent1 = edge[0]
     agent2 = edge[1]
-    action1 = actions[0]
-    action2 = actions[1]
+    action1 = g.actionIndex(actions[0])
+    action2 = g.actionIndex(actions[1])
+
     productions = cg[agent1][agent2]['productions']
 
     production1 = productions[:, 0][action1]
     production2 = productions[0, :][action2]
 
-    optiQ1 = localQVal(agent1, oja[agent1], cg)
-    optiQ2 = localQVal(agent2, oja[agent2], cg)
+    optiQ1 = localQVal(agent1, oja[agent1 - 1], cg)
+    optiQ2 = localQVal(agent2, oja[agent2 - 1], cg)
 
     localQ1 = localQVal(agent1, action1, cg)
     localQ2 = localQVal(agent2, action2, cg)
@@ -68,7 +77,7 @@ def discountedSum(edge, actions, oja, cg):
     updatedLocalQ2 = production2 + g.gamma*optiQ2 - localQ2
 
     # Assign new found Q's
-    cg.node[agent1]['qFunction'][action1][action2] = updatedLocalQ1
+    cg.node[agent1]['qFunction'][action1][action1] = updatedLocalQ1
     cg.node[agent2]['qFunction'][action2][action1] = updatedLocalQ2
 
     summ = updatedLocalQ1 + updatedLocalQ2
@@ -91,9 +100,12 @@ def findOJA(cg, nActions):
 
     counter = len(graph)
 
+    maxes = []
+
     while counter > 1: # Process all nodes except one
         outs = list(graph.out_edges(counter))
         ins = list(graph.in_edges(counter))
+        ins2 = list(graph.in_edges(counter - 1))
 
         hasInfluenced = None
         hasInfluencer = None
@@ -104,54 +116,41 @@ def findOJA(cg, nActions):
         if len(ins) > 0:
             hasInfluencer = ins[0][0]
 
-        # Check if the variable has a influencer. If not, it is a Independent
-        # Learner (IL).
-        if not hasInfluencer:
-            if hasInfluenced:
-                graph.remove_edge(counter, hasInfluenced)
-            #graph.remove_node(counter)
-
-        # The multi-agent approach
-        if hasInfluencer:
-            influencerActions = graph.node[hasInfluencer]['qFunction']
-            influencedActions = np.zeros([nActions, nActions])
-            if hasInfluenced:
-                influencedActions = graph.node[hasInfluencer]['qFunction']
-
-            # For every action of the influenced en the influencer, the
-            # internalMaxFun returns the maximum of the sum of the Q values from
-            # the local Q function of the influenced variable and the Q function
-            # of the eliminated one.
-                for a1 in actions:
-                    for a2 in actions:
-                        result = max(np.add(influencedActions[a1],
-                                            influencerActions[a2]))
-                        graph.node[hasInfluenced]['qFunction'][a1] = result
+        optimalRules = []
+        valRules = np.transpose(graph[hasInfluencer][counter]['valRules'])
+        for ownAction in valRules:
+            optimalRules.append(np.max(ownAction))
+        graph[1][2]['valRules'] = optimalRules
 
 
-                # Eliminate the variable and it's edges
-                graph.remove_edge(hasInfluencer, counter)
-                graph.remove_edge(counter, hasInfluenced)
-                #graph.remove_node(counter)
-
-                                            # Decrease counter
+        maxes.append(optimalRules)
+        # Decrease counter
         counter -= 1
+
+    maxes = maxes[::-1] # Take reverse
+    print maxes
 
     # When all but one of the variables is eliminated, the optmal action of
     # of the only variable left is calculated with max(internalMaxFun(action)).
     # To calculate the optimal actions of the other variables, the algoritme
     # traverses the graph backwards.
-    counter = len(cg)
+
+    firstQ = graph.node[counter]['qFunction']
+    counter = 1
     optimalActions = []
-
-
-
-
+    optimalActions.append(argmaxMat(firstQ)[1])
 
     # !!!!!!!!! Moet anders!
+    #g.debug(graph.node[1]['qFunction'])
+    #g.debug(graph.node[2]['qFunction'])
+    #g.debug(graph.node[3]['qFunction'])
 
-    while counter > 0:
-
+    while counter < len(cg):
+        q = graph.node[counter]['qFunction']
+        prevAction = optimalActions[counter - 1]
+        actions = q[:, prevAction]
+        optimalAction = np.argmax(actions)
+        optimalActions.append(optimalAction)
         #optimalActions.append(np.array(graph.node[counter]['qFunction']).argmax())
-        counter -= 1
+        counter += 1
     return optimalActions

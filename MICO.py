@@ -30,17 +30,9 @@ def MICO_wind(config, wind):
     infra = i.loadInfrastructureDB(config)
 
     nTurbines = len(infra)
-    nActions = 7 # Don't forget about 0
-    step = 5
     nEpisodes = 200
 
-    def actionIndex(action):
-        normalized = action / step
-        return normalized + ((nActions - 1) / 2)
-
-
-
-    CG = cg.createCG(infra, nActions, wind)
+    CG = cg.createCG(infra, g.nActions, wind)
 
     g.printStat("Starting learning session: " + str(nEpisodes) + " episodes")
 
@@ -50,7 +42,7 @@ def MICO_wind(config, wind):
 
         # Find optimal joint action (OJA) using variable elimination
 
-        OJA = cg.findOJA(CG, nActions)
+        OJA = cg.findOJA(CG, g.nActions)
 
         # Chose the OJA action with a chance of (1 - epsilon) or chose a random
         # action.
@@ -61,21 +53,24 @@ def MICO_wind(config, wind):
             jointAction = OJA
             g.printStat("       Using OJA")
         else:
-            jointAction = map(lambda x: r.randint(-((nActions - 1) / 2), ((nActions - 1) / 2)) * step, np.zeros(nTurbines)) # Actions are plurality of 5
+            jointAction = map(lambda x: r.randint(-((g.nActions - 1) / 2), ((g.nActions - 1) / 2)) * g.step, np.zeros(nTurbines)) # Actions are plurality of 5
             g.printStat("       Using random action")
 
         g.printStat("       Joint action: " + str(jointAction))
+
+        #test
+        for edge in CG.edges():
+            valRules = CG[edge[0]][edge[1]]['valRules']
+            valRules[edge[0], edge[1]] = np.random.random()
+
 
         # Validate jointAction in WISDEM and receive the power productions
 
         Q = Query()
 
-        print jointAction
-        newYaws = []
         turbines = infra.all()
 
         for turbine in turbines:
-            print turbine
             turbine['yaw'] = turbine['yaw'] + jointAction[turbine['id'] - 1]
 
         powerProductions = f.calcProduction(wind, turbines)
@@ -87,17 +82,14 @@ def MICO_wind(config, wind):
             turbine2 = infra.search(Q.id == edge[1])[0]
             actionTurbine1 = jointAction[turbine1['id']]
             actionTurbine2 = jointAction[turbine1['id']]
-            print CG[From][To]['productions']
-            CG[From][To]['productions'][actionIndex(actionTurbine1)][actionIndex(actionTurbine2)] = powerProductions[turbine1['id'] - 1] + powerProductions[turbine2['id'] - 1]
-
+            CG[From][To]['productions'][g.actionIndex(actionTurbine1)][g.actionIndex(actionTurbine2)] = powerProductions[turbine1['id'] - 1] + powerProductions[turbine2['id'] - 1]
 
             # Update valRules
-#            discSum = cg.discountedSum(edge, [jointAction[edge[0]], jointAction[edge[1]]], OJA, CG)
-#            valRules = CG[edge[0]][edge[1]]['valRules']
+            discSum = cg.discountedSum(edge, [jointAction[0], jointAction[0]], OJA, CG)
+            valRules = CG[edge[0]][edge[1]]['valRules']
 
-#            adjustedProduction = valRules[edge[0]][edge[1]] + discSum
-#            valRules[edge[0], edge[1]] = adjustedProduction
-
+            adjustedProduction = valRules[edge[0]][edge[1]] + discSum
+            valRules[edge[0], edge[1]] = adjustedProduction
 
 
         g.printStat("       Total power production: " + str(powerProductions.sum()))

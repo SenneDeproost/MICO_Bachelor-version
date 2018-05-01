@@ -6,9 +6,16 @@ import time
 gamma = 0.9
 learningRate = 0.9
 discount = 0.9
-epsilon = 1
+epsilon = 0.5
+
+step = 5
+nActions = 7 # Don't forget about 0
 
 logName = str(time.time()) + ".log"
+
+def actionIndex(action):
+    normalized = action / step
+    return normalized + ((nActions - 1) / 2)
 
 
 
@@ -25,3 +32,8 @@ def raiseError(function, message):
     print(message)
     print("*" * len(message))
     exit()
+
+def debug(msg):
+        print "/////DEBUG//////"
+        print msg
+        print "////////////////"
