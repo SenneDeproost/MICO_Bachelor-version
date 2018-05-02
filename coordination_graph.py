@@ -171,10 +171,11 @@ def findOJA(cg, nActions):
     # traverses the graph backwards.
 
     firstQ = graph.node[counter]['qFunction']
+    counter = 1
     optimalActions = []
     optimalActions.append(argmaxMat(firstQ)[1])
 
-    counter += 1
+    #counter += 1
 
     # !!!!!!!!! Moet anders!
     #g.debug(graph.node[1]['qFunction'])
