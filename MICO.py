@@ -27,6 +27,8 @@ def MICO_wind(config, wind):
     g.printStat("Starting MICO_wind with " + config + " as configuration")
     g.printStat("   Wind blows " + str(wind["angle"]) + " degrees with a speed of " + str(wind["speed"]) + " m/s")
 
+    totalMax = {'production': 0, 'action': None}
+
     infra = i.loadInfrastructureDB(config)
 
     nTurbines = len(infra)
@@ -80,11 +82,17 @@ def MICO_wind(config, wind):
 
         powerProductions = f.calcProduction(wind, turbines)
 
+        total = np.sum(powerProductions)
+        if total > totalMax['production']:
+            totalMax['production'] = total
+            totalMax['action'] = jointAction
+
+
         for edge in CG.edges():
             From = edge[0]
             To = edge[1]
-            turbine1 = infra.search(Q.id == edge[0])[0]
-            turbine2 = infra.search(Q.id == edge[1])[0]
+            turbine1 = infra.search(Q.id == From)[0]
+            turbine2 = infra.search(Q.id == To)[0]
             actionTurbine1 = jointAction[turbine1['id']]
             actionTurbine2 = jointAction[turbine1['id']]
             CG[From][To]['productions'][g.actionIndex(actionTurbine1)][g.actionIndex(actionTurbine2)] = powerProductions[turbine1['id'] - 1] + powerProductions[turbine2['id'] - 1]
@@ -102,6 +110,7 @@ def MICO_wind(config, wind):
 
         g.printStat("       Total power production: " + str(powerProductions.sum()))
 
+    print totalMax
     g.printStat("Done!")
 
 g.printStat("Done loading modules")
