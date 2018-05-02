@@ -102,3 +102,7 @@ ENV/
 
 # WISDEM
 WISDEM/OpenMDAO
+
+# MICO
+logs
+.csv

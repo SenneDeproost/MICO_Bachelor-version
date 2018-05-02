@@ -12,6 +12,7 @@ import globals as g
 import infrastructure as i
 import coordination_graph as cg
 import banner as b
+import log as l
 import WISDEM.FLORIS_SE.NREL5_calc as f
 
 b.printBanner()
@@ -26,6 +27,8 @@ wind = {"angle": 180, "speed": 8.1}
 def MICO_wind(config, wind):
     g.printStat("Starting MICO_wind with " + config + " as configuration")
     g.printStat("   Wind blows " + str(wind["angle"]) + " degrees with a speed of " + str(wind["speed"]) + " m/s")
+
+    l.createCSV()
 
     totalMax = {'production': 0, 'action': None, "OJA?": False}
 
@@ -111,6 +114,7 @@ def MICO_wind(config, wind):
             adjustedProduction = valRules[normalizedFrom][normalizedTo] + discSum
             valRules[normalizedFrom][normalizedTo] = adjustedProduction
 
+        l.appendCSV([[episode, OJA, jointAction, powerProductions]])
 
         g.printStat("       Total power production: " + str(powerProductions.sum()))
 
