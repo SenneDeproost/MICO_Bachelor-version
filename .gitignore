@@ -105,4 +105,4 @@ WISDEM/OpenMDAO
 
 # MICO
 logs
-.csv
+*.csv
