@@ -50,10 +50,16 @@ def localQVal(agent, action, cg):
 
     for edge in involvement:
         valRules = cg[edge[0]][edge[1]]['valRules'] #!!!!
-        result += np.sum(valRules[:, g.actionIndex(action)])
-        result += np.sum(valRules[g.actionIndex(action), :])
+        print "lolo"
+        result += np.sum(valRules[:, g.actionIndex(action)]) / len(valRules)
+        print result
+        result += np.sum(valRules[g.actionIndex(action), :]) / len(valRules)
+        print result
+        print len(involvement)
+        print "lala"
 
-    return result / len(involvement)
+
+    return result
 
 # Discounted sum for the involvement of two agents
 def discountedSum(edge, actions, oja, cg):

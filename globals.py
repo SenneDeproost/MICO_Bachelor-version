@@ -5,8 +5,8 @@ import time
 
 gamma = 0.9
 learningRate = 0.9
-discount = 0.9
-epsilon = 0.5
+discount = 0.01
+epsilon = 0.1
 
 step = 5
 nActions = 7 # Don't forget about 0

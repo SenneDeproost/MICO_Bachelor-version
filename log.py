@@ -6,7 +6,7 @@ extension = '.csv'
 directory = './logs/csv/'
 fileName = str(timeStamp) + extension
 
-header = [["episode", "OJA", "joint action", "production"]]
+header = [["episode", "OJA", "joint action", "production", "total production"]]
 
 def createCSV():
 	with open(fileName, 'w+') as File:

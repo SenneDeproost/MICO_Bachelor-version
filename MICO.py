@@ -30,12 +30,12 @@ def MICO_wind(config, wind):
 
     l.createCSV()
 
-    totalMax = {'production': 0, 'action': None, "OJA?": False}
+    totalMax = {'production': 0, 'action': None, "OJA": 0}
 
     infra = i.loadInfrastructureDB(config)
 
     nTurbines = len(infra)
-    nEpisodes = 200
+    nEpisodes = 50
 
     CG = cg.createCG(infra, g.nActions, wind)
 
@@ -47,7 +47,7 @@ def MICO_wind(config, wind):
 
         # Find optimal joint action (OJA) using variable elimination
 
-        OJA = cg.findOJA(CG, g.nActions)
+        OJA = map(lambda x: g.indexAction(x) ,cg.findOJA(CG, g.nActions))
 
         # Chose the OJA action with a chance of (1 - epsilon) or chose a random
         # action.
@@ -55,7 +55,7 @@ def MICO_wind(config, wind):
         jointAction = None
 
         if r.random() < (1 - g.epsilon):
-            jointAction = map(lambda x: g.indexAction(x) ,OJA)
+            jointAction = OJA
             g.printStat("       Using OJA")
         else:
             jointAction = map(lambda x: r.randint(-((g.nActions - 1) / 2), ((g.nActions - 1) / 2)) * g.step, np.zeros(nTurbines)) # Actions are plurality of 5
@@ -89,10 +89,7 @@ def MICO_wind(config, wind):
         if total > totalMax['production']:
             totalMax['production'] = total
             totalMax['action'] = jointAction
-            if OJA == jointAction:
-                totalMax['OJA?'] == True
-            else:
-                totalMax['OJA?'] == False
+            totalMax['OJA'] = OJA
 
 
         for edge in CG.edges():
@@ -114,7 +111,7 @@ def MICO_wind(config, wind):
             adjustedProduction = valRules[normalizedFrom][normalizedTo] + discSum
             valRules[normalizedFrom][normalizedTo] = adjustedProduction
 
-        l.appendCSV([[episode, OJA, jointAction, powerProductions]])
+        l.appendCSV([[episode, OJA, jointAction, powerProductions, powerProductions.sum()]])
 
         g.printStat("       Total power production: " + str(powerProductions.sum()))
 
