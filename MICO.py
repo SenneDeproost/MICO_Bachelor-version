@@ -55,7 +55,7 @@ def MICO_wind(config, wind):
         jointAction = None
 
         if r.random() < (1 - g.epsilon):
-            jointAction = OJA
+            jointAction = map(lambda x: g.indexAction(x) ,OJA)
             g.printStat("       Using OJA")
         else:
             jointAction = map(lambda x: r.randint(-((g.nActions - 1) / 2), ((g.nActions - 1) / 2)) * g.step, np.zeros(nTurbines)) # Actions are plurality of 5
@@ -105,7 +105,7 @@ def MICO_wind(config, wind):
             CG[From][To]['productions'][g.actionIndex(actionTurbine1)][g.actionIndex(actionTurbine2)] = powerProductions[turbine1['id'] - 1] + powerProductions[turbine2['id'] - 1]
 
             # Update valRules
-            discSum = cg.discountedSum(edge, [jointAction[0], jointAction[0]], OJA, CG)
+            discSum = cg.discountedSum(edge, [jointAction[From - 1], jointAction[To - 1]], OJA, CG)
             valRules = CG[edge[0]][edge[1]]['valRules']
 
             normalizedFrom = g.actionIndex(jointAction[From - 1])

@@ -17,6 +17,10 @@ def actionIndex(action):
     normalized = action / step
     return normalized + ((nActions - 1) / 2)
 
+def indexAction(index):
+    normalized = index*step
+    return normalized - step * ((nActions - 1) / 2)
+
 
 
 def printStat(message):

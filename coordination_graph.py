@@ -77,10 +77,14 @@ def discountedSum(edge, actions, oja, cg):
     updatedLocalQ2 = production2 + g.gamma*optiQ2 - localQ2
 
     # Assign new found Q's
-    cg.node[agent1]['qFunction'][action1][action1] = updatedLocalQ1
+    cg.node[agent1]['qFunction'][action1][action2] = updatedLocalQ1
     cg.node[agent2]['qFunction'][action2][action1] = updatedLocalQ2
 
     summ = updatedLocalQ1 + updatedLocalQ2
+
+    print "lel"
+    print (summ, actions)
+    print "lel"
 
     return g.discount*summ
 
