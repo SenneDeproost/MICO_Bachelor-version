@@ -27,7 +27,7 @@ def MICO_wind(config, wind):
     g.printStat("Starting MICO_wind with " + config + " as configuration")
     g.printStat("   Wind blows " + str(wind["angle"]) + " degrees with a speed of " + str(wind["speed"]) + " m/s")
 
-    totalMax = {'production': 0, 'action': None}
+    totalMax = {'production': 0, 'action': None, "OJA?": False}
 
     infra = i.loadInfrastructureDB(config)
 
@@ -86,9 +86,13 @@ def MICO_wind(config, wind):
         if total > totalMax['production']:
             totalMax['production'] = total
             totalMax['action'] = jointAction
+            if OJA == jointAction:
+                totalMax['OJA?'] = True
+            else:
+                totalMax['OJA'] = False
 
 
-        for edge in CG.edges():
+
             From = edge[0]
             To = edge[1]
             turbine1 = infra.search(Q.id == From)[0]
