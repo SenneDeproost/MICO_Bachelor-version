@@ -97,12 +97,39 @@ def argmaxMat(matrix):
 def findOJA(cg, nActions):
     graph = cg.copy()
     actions = range(0, nActions)
-
     counter = len(graph)
 
-    maxes = []
 
-    while counter > 1: # Process all nodes except one
+    if counter == len(graph):
+        outs = list(graph.out_edges(counter))
+        ins = list(graph.in_edges(counter))
+        ins2 = list(graph.in_edges(counter - 1)) #!!!
+
+        hasInfluenced = None
+        hasInfluencer = None
+        hasInfluencer2 = None
+
+        if len(outs) > 0:
+            hasInfluenced = outs[0][1]
+
+        if len(ins) > 0:
+            hasInfluencer = ins[0][0]
+
+        if len(ins) > 0:
+            hasInfluencer2 = ins2[0][0]
+
+        optimalRules = []
+        valRules = np.transpose(graph[hasInfluencer][counter]['valRules'])
+        g.debug(valRules)
+        for ownAction in valRules:
+            optimalRules.append(np.max(ownAction))
+        graph[hasInfluencer2][hasInfluencer]['valRules'] = optimalRules
+
+    counter -= 1
+
+#///////////////////////////////////////////////////////////////////////////////
+
+    while counter > 2: # Process all nodes except one
         outs = list(graph.out_edges(counter))
         ins = list(graph.in_edges(counter))
         ins2 = list(graph.in_edges(counter - 1))
@@ -117,18 +144,25 @@ def findOJA(cg, nActions):
             hasInfluencer = ins[0][0]
 
         optimalRules = []
-        valRules = np.transpose(graph[hasInfluencer][counter]['valRules'])
+        print (hasInfluencer, counter)
+        valRules = np.transpose(cg[hasInfluencer][counter]['valRules'])
+        internalMax = graph[hasInfluencer][counter]['valRules']
+        print valRules
+        print internalMax
         for ownAction in valRules:
-            optimalRules.append(np.max(ownAction))
-        graph[1][2]['valRules'] = optimalRules
+            print 5
 
 
-        maxes.append(optimalRules)
+        graph[hasInfluencer2][hasInfluencer]['valRules'] = optimalRules
+
         # Decrease counter
         counter -= 1
 
-    maxes = maxes[::-1] # Take reverse
-    print maxes
+#///////////////////////////////////////////////////////////////////////////////
+
+    g.debug(graph[1][2]['valRules'])
+
+
 
     # When all but one of the variables is eliminated, the optmal action of
     # of the only variable left is calculated with max(internalMaxFun(action)).

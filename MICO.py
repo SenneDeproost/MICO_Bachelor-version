@@ -60,9 +60,14 @@ def MICO_wind(config, wind):
 
         #test
         for edge in CG.edges():
-            valRules = CG[edge[0]][edge[1]]['valRules']
-            valRules[edge[0], edge[1]] = np.random.random()
-
+            CG[edge[0]][edge[1]]['valRules'][1][0] = np.random.random() * 1000
+            CG[edge[0]][edge[1]]['valRules'][1][5] = np.random.random() * 1000
+            CG[edge[0]][edge[1]]['valRules'][4][6] = np.random.random() * 1000
+            CG[edge[0]][edge[1]]['valRules'][6][6] = np.random.random() * 1000
+            #valRules[edge[0]][edge[1]] = np.random.random()
+            print edge
+            #print valRules
+            print "haha"
 
         # Validate jointAction in WISDEM and receive the power productions
 
@@ -88,8 +93,11 @@ def MICO_wind(config, wind):
             discSum = cg.discountedSum(edge, [jointAction[0], jointAction[0]], OJA, CG)
             valRules = CG[edge[0]][edge[1]]['valRules']
 
-            adjustedProduction = valRules[edge[0]][edge[1]] + discSum
-            valRules[edge[0], edge[1]] = adjustedProduction
+            normalizedFrom = g.actionIndex(jointAction[From - 1])
+            normalizedTo = g.actionIndex(jointAction[To - 1])
+
+            adjustedProduction = valRules[normalizedFrom][normalizedTo] + discSum
+            valRules[normalizedFrom][normalizedTo] = adjustedProduction
 
 
         g.printStat("       Total power production: " + str(powerProductions.sum()))
