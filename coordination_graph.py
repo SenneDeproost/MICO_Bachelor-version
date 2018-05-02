@@ -161,6 +161,7 @@ def findOJA(cg, nActions):
 #///////////////////////////////////////////////////////////////////////////////
 
     g.debug(graph[1][2]['valRules'])
+    g.debug(graph[2][3]['valRules'])
 
 
 

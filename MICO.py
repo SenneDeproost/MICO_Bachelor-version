@@ -59,15 +59,15 @@ def MICO_wind(config, wind):
         g.printStat("       Joint action: " + str(jointAction))
 
         #test
-        for edge in CG.edges():
-            CG[edge[0]][edge[1]]['valRules'][1][0] = np.random.random() * 1000
-            CG[edge[0]][edge[1]]['valRules'][1][5] = np.random.random() * 1000
-            CG[edge[0]][edge[1]]['valRules'][4][6] = np.random.random() * 1000
-            CG[edge[0]][edge[1]]['valRules'][6][6] = np.random.random() * 1000
+    #    for edge in CG.edges():
+    #        CG[edge[0]][edge[1]]['valRules'][1][0] = np.random.random() * 1000
+    #        CG[edge[0]][edge[1]]['valRules'][1][5] = np.random.random() * 1000
+    #        CG[edge[0]][edge[1]]['valRules'][4][6] = np.random.random() * 1000
+    #        CG[edge[0]][edge[1]]['valRules'][6][6] = np.random.random() * 1000
             #valRules[edge[0]][edge[1]] = np.random.random()
-            print edge
+    #        print edge
             #print valRules
-            print "haha"
+    #        print "haha"
 
         # Validate jointAction in WISDEM and receive the power productions
 
