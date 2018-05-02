@@ -87,12 +87,12 @@ def MICO_wind(config, wind):
             totalMax['production'] = total
             totalMax['action'] = jointAction
             if OJA == jointAction:
-                totalMax['OJA?'] = True
+                totalMax['OJA?'] == True
             else:
-                totalMax['OJA'] = False
+                totalMax['OJA?'] == False
 
 
-
+        for edge in CG.edges():
             From = edge[0]
             To = edge[1]
             turbine1 = infra.search(Q.id == From)[0]
