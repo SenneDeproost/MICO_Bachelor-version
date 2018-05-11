@@ -45,19 +45,13 @@ def findInvolvement(agent, cg):
 
 def localQVal(agent, action, cg):
     involvement = findInvolvement(agent , cg) # List of edges (a, b)
-    valRules = []
     result = 0
 
     for edge in involvement:
         valRules = cg[edge[0]][edge[1]]['valRules'] #!!!!
-        print "lolo"
-        result += np.sum(valRules[:, g.actionIndex(action)]) / len(valRules)
-        print result
-        result += np.sum(valRules[g.actionIndex(action), :]) / len(valRules)
-        print result
-        print len(involvement)
-        print "lala"
-
+        result += np.sum(valRules) / 2
+        #result += np.sum(valRules[:, g.actionIndex(action)]) / len(valRules)
+        #result += np.sum(valRules[g.actionIndex(action), :]) / len(valRules)
 
     return result
 
@@ -88,9 +82,6 @@ def discountedSum(edge, actions, oja, cg):
 
     summ = updatedLocalQ1 + updatedLocalQ2
 
-    print "lel"
-    print (summ, actions)
-    print "lel"
 
     return g.discount*summ
 
@@ -107,13 +98,14 @@ def argmaxMat(matrix):
 def findOJA(cg, nActions):
     graph = cg.copy()
     actions = range(0, nActions)
-    counter = len(graph)
+    counter = 1
+    local = [np.zeros([nActions])]
 
 
-    if counter == len(graph):
+    if counter < len(graph):
         outs = list(graph.out_edges(counter))
         ins = list(graph.in_edges(counter))
-        ins2 = list(graph.in_edges(counter - 1)) #!!!
+    #    ins2 = list(graph.in_edges(counter - 1)) #!!!
 
         hasInfluenced = None
         hasInfluencer = None
@@ -125,53 +117,30 @@ def findOJA(cg, nActions):
         if len(ins) > 0:
             hasInfluencer = ins[0][0]
 
-        if len(ins) > 0:
-            hasInfluencer2 = ins2[0][0]
+    #    if len(ins) > 0:
+    #        hasInfluencer2 = ins2[0][0]
 
         optimalRules = []
-        valRules = np.transpose(graph[hasInfluencer][counter]['valRules'])
-        g.debug(valRules)
+        valRules = np.transpose(graph[counter][hasInfluenced]['valRules'])
+
+        # Add previous founded rules
+        for action in actions:
+            valRules[action] = valRules[action] + local[-1][action]
+
+        # Find maxes
         for ownAction in valRules:
             optimalRules.append(np.max(ownAction))
-        graph[hasInfluencer2][hasInfluencer]['valRules'] = optimalRules
+    #    graph[hasInfluencer2][hasInfluencer]['valRules'] = optimalRules
+        local.insert(0, optimalRules) # Insert in front
+        print valRules.sum()
 
-    counter -= 1
-
-#///////////////////////////////////////////////////////////////////////////////
-
-    while counter > 2: # Process all nodes except one
-        outs = list(graph.out_edges(counter))
-        ins = list(graph.in_edges(counter))
-        ins2 = list(graph.in_edges(counter - 1))
-
-        hasInfluenced = None
-        hasInfluencer = None
-
-        if len(outs) > 0:
-            hasInfluenced = outs[0][1]
-
-        if len(ins) > 0:
-            hasInfluencer = ins[0][0]
-
-        optimalRules = []
-        print (hasInfluencer, counter)
-        valRules = np.transpose(cg[hasInfluencer][counter]['valRules'])
-        internalMax = graph[hasInfluencer][counter]['valRules']
-        print valRules
-        print internalMax
-        for ownAction in valRules:
-            print 5
-
-
-        graph[hasInfluencer2][hasInfluencer]['valRules'] = optimalRules
-
-        # Decrease counter
-        counter -= 1
+    counter += 1
 
 #///////////////////////////////////////////////////////////////////////////////
 
-    g.debug(graph[1][2]['valRules'])
-    g.debug(graph[2][3]['valRules'])
+
+#    g.debug(graph[1][2]['valRules'])
+#    g.debug(graph[2][3]['valRules'])
 
 
 

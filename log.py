@@ -11,7 +11,7 @@ header = [["episode", "OJA", "joint action", "production", "total production"]]
 def createCSV():
 	with open(fileName, 'w+') as File:
 		writer = c.writer(File)
-		writer.writerows(header)
+	#	writer.writerows(header)
 
 def appendCSV(row):
 	with open(fileName, 'a') as File:

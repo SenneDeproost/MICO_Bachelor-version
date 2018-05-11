@@ -35,7 +35,7 @@ def MICO_wind(config, wind):
     infra = i.loadInfrastructureDB(config)
 
     nTurbines = len(infra)
-    nEpisodes = 50
+    nEpisodes = 5000
 
     CG = cg.createCG(infra, g.nActions, wind)
 
@@ -110,8 +110,13 @@ def MICO_wind(config, wind):
 
             adjustedProduction = valRules[normalizedFrom][normalizedTo] + discSum
             valRules[normalizedFrom][normalizedTo] = adjustedProduction
+            data = []
+            data.append(episode)
+            data.append(OJA)
+            data.append(jointAction)
+            data.append(powerProductions)
 
-        l.appendCSV([[episode, OJA, jointAction, powerProductions, powerProductions.sum()]])
+        l.appendCSV([[data]])
 
         g.printStat("       Total power production: " + str(powerProductions.sum()))
 
