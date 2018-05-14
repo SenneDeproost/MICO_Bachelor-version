@@ -59,11 +59,15 @@ def localQVal(agent, action, cg):
 def discountedSum(edge, actions, oja, cg):
     agent1 = edge[0]
     agent2 = edge[1]
-    action1 = g.actionIndex(actions[0])
-    action2 = g.actionIndex(actions[1])
+    action1 = actions[0]
+    action2 = actions[1]
 
+    print "PRODUCTIONS"
     productions = cg[agent1][agent2]['productions']
+    print productions
 
+#    production1 = productions[action1][action2]
+#    production2 = productions[0, :][action2]
     production1 = productions[:, 0][action1]
     production2 = productions[0, :][action2]
 
@@ -73,17 +77,18 @@ def discountedSum(edge, actions, oja, cg):
     localQ1 = localQVal(agent1, action1, cg)
     localQ2 = localQVal(agent2, action2, cg)
 
-    updatedLocalQ1 = production1 + g.gamma*optiQ1 - localQ1
-    updatedLocalQ2 = production2 + g.gamma*optiQ2 - localQ2
+    updatedLocalQ1 = production1 + g.gamma*optiQ1 #- localQ1
+    updatedLocalQ2 = production2 + g.gamma*optiQ2 #- localQ2
 
     # Assign new found Q's
     cg.node[agent1]['qFunction'][action1][action2] = updatedLocalQ1
     cg.node[agent2]['qFunction'][action2][action1] = updatedLocalQ2
 
     summ = updatedLocalQ1 + updatedLocalQ2
+    res = g.discount*summ
+    res2 = g.discount*production1
 
-
-    return g.discount*summ
+    return res
 
 
 def argmaxMat(matrix):
@@ -102,7 +107,7 @@ def findOJA(cg, nActions):
     local = [np.zeros([nActions])]
 
 
-    if counter < len(graph):
+    while counter < len(graph):
         outs = list(graph.out_edges(counter))
         ins = list(graph.in_edges(counter))
     #    ins2 = list(graph.in_edges(counter - 1)) #!!!
@@ -121,7 +126,7 @@ def findOJA(cg, nActions):
     #        hasInfluencer2 = ins2[0][0]
 
         optimalRules = []
-        valRules = np.transpose(graph[counter][hasInfluenced]['valRules'])
+        valRules = graph[counter][hasInfluenced]['valRules']
 
         # Add previous founded rules
         for action in actions:
@@ -131,42 +136,52 @@ def findOJA(cg, nActions):
         for ownAction in valRules:
             optimalRules.append(np.max(ownAction))
     #    graph[hasInfluencer2][hasInfluencer]['valRules'] = optimalRules
-        local.insert(0, optimalRules) # Insert in front
-        print valRules.sum()
 
-    counter += 1
+        local.append(optimalRules)
+        counter += 1
+
 
 #///////////////////////////////////////////////////////////////////////////////
 
 
 #    g.debug(graph[1][2]['valRules'])
 #    g.debug(graph[2][3]['valRules'])
-
-
+    print local
 
     # When all but one of the variables is eliminated, the optmal action of
     # of the only variable left is calculated with max(internalMaxFun(action)).
     # To calculate the optimal actions of the other variables, the algoritme
     # traverses the graph backwards.
 
-    firstQ = graph.node[counter]['qFunction']
-    counter = 1
-    optimalActions = []
-    optimalActions.append(argmaxMat(firstQ)[1])
+    #local[-2][1] = 500000000
+    #local[-2][0] = 0
+    #local[-3][3] = 55
 
-    #counter += 1
+    firstVals = local[-1]
+    optimalActions = []
+    optimalActions.append(np.argmax(firstVals))
+
+    counter -= 1
 
     # !!!!!!!!! Moet anders!
     #g.debug(graph.node[1]['qFunction'])
     #g.debug(graph.node[2]['qFunction'])
     #g.debug(graph.node[3]['qFunction'])
 
-    while counter < len(cg):
-        q = graph.node[counter]['qFunction']
-        prevAction = optimalActions[counter - 1]
-        actions = q[:, prevAction]
-        optimalAction = np.argmax(actions)
-        optimalActions.append(optimalAction)
+    while counter > 0:
+        val = graph[counter][counter + 1]['valRules']
+        prevAction = optimalActions[-1]
+        valPrevAction = val[:, prevAction]
+        maxVal = np.argmax(valPrevAction)
+        optimalActions.insert(0, maxVal)
+
+
+        #prevAction = optimalActions[counter - 1]
+        #actions = q[:, prevAction]
+        #optimalAction = np.argmax(actions)
+        #optimalActions.append(optimalAction)
         #optimalActions.append(np.array(graph.node[counter]['qFunction']).argmax())
-        counter += 1
+        counter -= 1
+
+    print optimalActions
     return optimalActions

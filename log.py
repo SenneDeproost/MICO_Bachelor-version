@@ -9,11 +9,13 @@ fileName = str(timeStamp) + extension
 header = [["episode", "OJA", "joint action", "production", "total production"]]
 
 def createCSV():
-	with open(fileName, 'w+') as File:
-		writer = c.writer(File)
+	4
+	#with open(fileName, 'w+') as File:
+		#writer = c.writer(File)
 	#	writer.writerows(header)
 
 def appendCSV(row):
-	with open(fileName, 'a') as File:
-		writer = c.writer(File)
-		writer.writerows(row)
+	4
+#	with open(fileName, 'a') as File:
+#		writer = c.writer(File)
+#		writer.writerows(row)
