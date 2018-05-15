@@ -49,7 +49,7 @@ def inWake(a, b, wind):
     )
 
     wind_angle = m.radians(wind_angle) + m.pi
-    zone_length = 200
+    zone_length = 500
 
     x_corr = m.cos(wind_angle)*zone_length
     y_corr = m.sin(wind_angle)*zone_length

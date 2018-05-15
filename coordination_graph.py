@@ -55,16 +55,16 @@ def localQVal(agent, action, cg):
     return result
 
 # Discounted sum for the involvement of two agents
-def discountedSum(edge, actions, oja, cg):
+def discountedSum(edge, actions, rewards, oja, cg):
     agent1 = edge[0]
     agent2 = edge[1]
     action1 = actions[0]
     action2 = actions[1]
 
-    productions = cg[agent1][agent2]['productions']
+    #productions = cg[agent1][agent2]['productions']
 
-    production1 = productions[action1][action2]
-    production2 = productions[0, :][action2]
+    production1 = rewards[agent1 - 1]
+    production2 = rewards[agent2 - 1]
 #    production1 = productions[:, 0][action1]
 #    production2 = productions[0, :][action2]
 
@@ -75,7 +75,7 @@ def discountedSum(edge, actions, oja, cg):
     localQ2 = localQVal(agent2, action2, cg)
 
     updatedLocalQ1 = production1 + g.gamma*optiQ1 - localQ1
-    updatedLocalQ2 = production2 + g.gamma*optiQ2 #- localQ2
+    updatedLocalQ2 = production2 + g.gamma*optiQ2 - localQ2
 
     # Assign new found Q's
     cg.node[agent1]['qFunction'][action1][action2] = updatedLocalQ1
@@ -84,6 +84,8 @@ def discountedSum(edge, actions, oja, cg):
     #summ = updatedLocalQ1 + updatedLocalQ2
     res = g.discount*updatedLocalQ1
     res2 = g.discount*production1
+
+    print (edge, production1)
 
     return res
 

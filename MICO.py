@@ -35,7 +35,7 @@ def MICO_wind(config, wind):
     infra = i.loadInfrastructureDB(config)
 
     nTurbines = len(infra)
-    nEpisodes = 50
+    nEpisodes = 500
 
     CG = cg.createCG(infra, g.nActions, wind)
 
@@ -125,7 +125,7 @@ def MICO_wind(config, wind):
             CG[From][To]['productions'][actionTurbine1][actionTurbine2] = powerProductions[turbine1['id'] - 1] + powerProductions[turbine2['id'] - 1]
 
             # Update valRules
-            discSum = cg.discountedSum(edge, [jointAction[From - 1], jointAction[To - 1]], OJA, CG)
+            discSum = cg.discountedSum(edge, [jointAction[From - 1], jointAction[To - 1]], powerProductions, OJA, CG)
             valRules = CG[edge[0]][edge[1]]['valRules']
 
             normalizedFrom = jointAction[From - 1]
@@ -133,6 +133,9 @@ def MICO_wind(config, wind):
 
             adjustedProduction = valRules[normalizedFrom][normalizedTo] + discSum
             valRules[normalizedFrom][normalizedTo] = adjustedProduction
+
+            print powerProductions
+            print valRules
 
 
 

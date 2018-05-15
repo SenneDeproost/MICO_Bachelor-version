@@ -26,16 +26,47 @@ axialInduction = 1.0/3.0 # used only for initialization
 generator_efficiency = 0.944
 hub_height = 90.0
 NREL5MWCPCT = pickle.load(open('WISDEM/FLORIS_SE/NREL5MWCPCT.p'))
+#NREL5MWCPCT = pickle.load(open('./NREL5MWCPCT.p'))
 datasize = NREL5MWCPCT.CP.size
 
 #DEBUG
 #wind = {"angle": 0, "speed": 8}
-a = {"location": {"x": 1000, "y": 20}, "yaw": 0}
-b = {"location": {"x": 55, "y": 20}, "yaw": 0}
-c = {"location": {"x": 55, "y": 20}, "yaw": 50}
-d = {"location": {"x": 550, "y": 20}, "yaw": 20}
-wind = {"angle": 0, "speed": 8.1}
+#a = {"location": {"x": 1000, "y": 20}, "yaw": 0}
+#b = {"location": {"x": 55, "y": 20}, "yaw": 0}
+#c = {"location": {"x": 55, "y": 20}, "yaw": 50}
+#d = {"location": {"x": 550, "y": 20}, "yaw": 20}
+#wind = {"angle": 0, "speed": 8.1}
 
+wind = {"angle": 180, "speed": 8.1}
+turs = [
+  {
+    "model": "NREL 5MW",
+    "location":
+    {
+      "x": 0,
+      "y": 0
+    },
+    "yaw": 0
+  },
+  {
+    "model": "NREL 5MW",
+    "location":
+    {
+      "x": 400,
+      "y": 0
+    },
+    "yaw": 0
+  },
+  {
+    "model": "NREL 5MW",
+    "location":
+    {
+      "x": 800,
+      "y": 0
+    },
+    "yaw": 0
+  }
+]
 
 
 def calcProduction(wind, turbines):
@@ -88,4 +119,5 @@ def calcProduction(wind, turbines):
     baselinePower = np.sum(myFloris.floris_power_0.wt_power)
     return myFloris.floris_power_0.wt_power
 
-#calcProduction(wind, [a, b, c, d])
+#print calcProduction(wind, [a, b, c, d])
+#print calcProduction(wind, turs)
