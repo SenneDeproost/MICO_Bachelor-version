@@ -52,9 +52,6 @@ def localQVal(agent, action, cg):
         result += np.sum(valRules[action]) / 2
         #result += np.sum(valRules[:, g.actionIndex(action)]) / len(valRules)
         #result += np.sum(valRules[g.actionIndex(action), :]) / len(valRules)
-
-    print "jijij"
-    print result
     return result
 
 # Discounted sum for the involvement of two agents
@@ -146,7 +143,6 @@ def findOJA(cg, nActions):
 
 #    g.debug(graph[1][2]['valRules'])
 #    g.debug(graph[2][3]['valRules'])
-    print local
 
     # When all but one of the variables is eliminated, the optmal action of
     # of the only variable left is calculated with max(internalMaxFun(action)).
@@ -183,5 +179,4 @@ def findOJA(cg, nActions):
         #optimalActions.append(np.array(graph.node[counter]['qFunction']).argmax())
         counter -= 1
 
-    print optimalActions
     return optimalActions

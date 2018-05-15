@@ -35,7 +35,7 @@ def MICO_wind(config, wind):
     infra = i.loadInfrastructureDB(config)
 
     nTurbines = len(infra)
-    nEpisodes = 5000
+    nEpisodes = 50
 
     CG = cg.createCG(infra, g.nActions, wind)
 
@@ -64,7 +64,24 @@ def MICO_wind(config, wind):
             jointAction = OJA
             g.printStat("       Using OJA")
         else:
-            jointAction = map(lambda x: r.randint(0, g.nActions - 1), np.zeros(nTurbines))
+        #    jointAction = map(lambda x: r.randint(0, g.nActions - 1), np.zeros(nTurbines))
+        #    jointAction = map(lambda x: x + r.randint(-2, 2), OJA)
+            jointAction = np.zeros(nTurbines)
+            counter = 0
+            for action in jointAction:
+                exploringStep = 1
+                rand = r.randint(-exploringStep, exploringStep)
+                print rand
+                if OJA[counter] + rand < 0:
+                    jointAction[counter] = OJA[counter] + abs(rand)
+                elif OJA[counter] + rand > (g.nActions - 1):
+                    jointAction[counter] = OJA[counter] - abs(rand)
+                else:
+                    jointAction[counter] = OJA[counter] + rand
+                counter += 1
+            jointAction = map(lambda x: int(x), jointAction)
+
+
             g.printStat("       Using random action")
 
         g.printStat("       Joint action: " + str(map(lambda x: g.indexAction(x), jointAction)))
@@ -90,8 +107,6 @@ def MICO_wind(config, wind):
             turbine['yaw'] = turbine['yaw'] + g.indexAction(jointAction[turbine['id'] - 1])
 
         powerProductions = f.calcProduction(wind, turbines)
-        print 123456789
-        print powerProductions
 
         total = np.sum(powerProductions)
         if total > totalMax['production']:
@@ -117,13 +132,7 @@ def MICO_wind(config, wind):
             normalizedTo = jointAction[To - 1]
 
             adjustedProduction = valRules[normalizedFrom][normalizedTo] + discSum
-            print "$$$$$$$$$$$$"
-            print jointAction
-            print  (normalizedFrom, normalizedTo)
-            print "Heeft als waarde: " + str(adjustedProduction)
-            print "$$$$$$$$$$$$"
             valRules[normalizedFrom][normalizedTo] = adjustedProduction
-            print valRules
 
 
 
