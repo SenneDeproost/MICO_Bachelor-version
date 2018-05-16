@@ -3,10 +3,10 @@ import time
 #commands = json.load(open("commands.json"))
 #global_vars = json.load(open("variables.json"))
 
-gamma = 0.9
+gamma = 0.8
 learningRate = 0.9
 discount = 0.1
-epsilon = 0.5
+epsilon = 0.3
 
 step = 2
 nActions = 3 # Don't forget about 0
