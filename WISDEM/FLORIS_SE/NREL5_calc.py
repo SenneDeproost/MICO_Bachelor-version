@@ -94,8 +94,8 @@ def calcProduction(wind, turbines):
     myFloris.parameters = FLORISParameters()
 
     # Normal distributed noise for wind direction and wind speed
-    angleNoise = 0
-    speedNoise = 0
+    angleNoise = np.random(1, 0)
+    speedNoise = np.random(1, 0)
 
     # Properties of the air and wind
     windDirection                   = wind["angle"] + angleNoise
