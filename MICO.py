@@ -64,22 +64,22 @@ def MICO_wind(config, wind):
             jointAction = OJA
             g.printStat("       Using OJA")
         else:
-        #    jointAction = map(lambda x: r.randint(0, g.nActions - 1), np.zeros(nTurbines))
-        #    jointAction = map(lambda x: x + r.randint(-2, 2), OJA)
-            jointAction = np.zeros(nTurbines)
-            counter = 0
-            for action in jointAction:
-                exploringStep = 1
-                rand = r.randint(-exploringStep, exploringStep)
-                print rand
-                if OJA[counter] + rand < 0:
-                    jointAction[counter] = OJA[counter] + abs(rand)
-                elif OJA[counter] + rand > (g.nActions - 1):
-                    jointAction[counter] = OJA[counter] - abs(rand)
-                else:
-                    jointAction[counter] = OJA[counter] + rand
-                counter += 1
-            jointAction = map(lambda x: int(x), jointAction)
+            jointAction = map(lambda x: r.randint(0, g.nActions - 1), np.zeros(nTurbines))
+        # //    jointAction = map(lambda x: x + r.randint(-2, 2), OJA)
+        #    jointAction = np.zeros(nTurbines)
+        #    counter = 0
+        #    for action in jointAction:
+        #        exploringStep = 1
+        #        rand = r.randint(-exploringStep, exploringStep)
+        #        print rand
+        #        if OJA[counter] + rand < 0:
+        #            jointAction[counter] = OJA[counter] + abs(rand)
+        #        elif OJA[counter] + rand > (g.nActions - 1):
+        #            jointAction[counter] = OJA[counter] - abs(rand)
+        #        else:
+        #            jointAction[counter] = OJA[counter] + rand
+        #        counter += 1
+        #    jointAction = map(lambda x: int(x), jointAction)
 
 
             g.printStat("       Using random action")
@@ -106,8 +106,8 @@ def MICO_wind(config, wind):
         for turbine in turbines:
             turbine['yaw'] = turbine['yaw'] + g.indexAction(jointAction[turbine['id'] - 1])
 
-        #powerProductions = f.calcProduction(wind, turbines)
-        powerProductions = np.array([500, 500, 500])
+        powerProductions = f.calcProduction(wind, turbines)
+        #powerProductions = np.array([500, 500, 500])
 
         total = np.sum(powerProductions)
         if total > totalMax['production']:

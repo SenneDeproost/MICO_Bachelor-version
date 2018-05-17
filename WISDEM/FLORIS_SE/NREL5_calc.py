@@ -93,9 +93,13 @@ def calcProduction(wind, turbines):
     # use default FLORIS parameters
     myFloris.parameters = FLORISParameters()
 
+    # Normal distributed noise for wind direction and wind speed
+    angleNoise = 0
+    speedNoise = 0
+
     # Properties of the air and wind
-    windDirection                   = wind["angle"]
-    windSpeed                       = wind["speed"] # in m/s
+    windDirection                   = wind["angle"] + angleNoise
+    windSpeed                       = wind["speed"] + speedNoise # in m/s
     myFloris.windrose_directions    = np.array([windDirection])
     myFloris.windrose_speeds        = windSpeed
     myFloris.air_density            = 1.1716

@@ -6,10 +6,10 @@ import time
 gamma = 0.8
 learningRate = 0.9
 discount = 0.1
-epsilon = 0.3
+epsilon = 0.9
 
 step = 2
-nActions = 3 # Don't forget about 0
+nActions = 5 # Don't forget about 0
 
 logName = str(time.time()) + ".log"
 

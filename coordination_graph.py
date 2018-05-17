@@ -121,8 +121,6 @@ def discountedSum(edge, actions, rewards, oja, cg):
     res = g.discount*updatedLocalQ1
     res2 = g.discount*production1
 
-    print (edge, production1)
-
     return res
 
 
