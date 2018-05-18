@@ -133,7 +133,7 @@ def argmaxMat(matrix):
     return (collom, row)
 
 # Find the Optimal Joint Action (at the moment for 3 node involvment max)
-def findOJA(cg, nActions):
+def findOJA2(cg, nActions):
     graph = cg.copy()
     actions = range(0, nActions)
     counter = 1
@@ -216,3 +216,29 @@ def findOJA(cg, nActions):
         counter -= 1
 
     return optimalActions
+
+
+
+def findOJA(cg, nActions):
+    local = [np.zeros(nActions)]
+
+    mats = [cg[1][2]['valRules']]
+    mats.append(cg[2][3]['valRules'])
+
+    for mat in mats:
+	       res = []
+	       mat = np.array(mat) + local[-1]
+	       for row in mat:
+		      res.append(np.max(row))
+	       local.append(res)
+
+    result = []
+
+    result.append(np.argmax(local[-1]))
+
+    for mat in reversed(mats):
+	       result.append(np.argmax(mat[:, result[-1]]))
+
+    result = list(reversed(result))
+
+    return result

@@ -35,7 +35,7 @@ def MICO_wind(config, wind):
     infra = i.loadInfrastructureDB(config)
 
     nTurbines = len(infra)
-    nEpisodes = 50000
+    nEpisodes = 10000
 
     CG = cg.createCG(infra, g.nActions, wind)
 
@@ -107,7 +107,7 @@ def MICO_wind(config, wind):
             turbine['yaw'] = turbine['yaw'] + g.indexAction(jointAction[turbine['id'] - 1])
 
         powerProductions = f.calcProduction(wind, turbines)
-        #powerProductions = np.array([500, 500, 500])
+        #powerProductions = np.array([500 + np.random.normal(0, 0.1), 500 + np.random.normal(0, 0.1), 500 + np.random.normal(0, 0.1)])
 
         total = np.sum(powerProductions)
         if total > totalMax['production']:
@@ -151,6 +151,7 @@ def MICO_wind(config, wind):
         g.printStat("       Total power production: " + str(powerProductions.sum()))
 
         print totalMax
+        print "OJA: " + str(OJA)
 
     g.printStat("Done!")
 
