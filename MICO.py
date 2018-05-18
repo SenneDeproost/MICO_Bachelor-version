@@ -139,14 +139,17 @@ def MICO_wind(config, wind):
             print valRules
 
 
+            data = [episode]
+            for element in OJA:
+                data.append(element)
+            for element in jointAction:
+                data.append(element)
+            for element in powerProductions:
+                data.append(element)
 
-            data = []
-            data.append(episode)
-            data.append(OJA)
-            data.append(jointAction)
-            data.append(powerProductions)
+            #data = [episode, OJA, jointAction, powerProductions]
 
-        l.appendCSV([[data]])
+        l.appendCSV([data])
 
         g.printStat("       Total power production: " + str(powerProductions.sum()))
 

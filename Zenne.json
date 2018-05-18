@@ -1,0 +1,38 @@
+[
+  {
+    "model": "NREL 5MW",
+    "location":
+    {
+      "x": 200,
+      "y": 10
+    },
+    "yaw": 0
+  },
+  {
+    "model": "NREL 5MW",
+    "location":
+    {
+      "x": 100,
+      "y": 20
+    },
+    "yaw": 0
+  },
+  {
+    "model": "NREL 5MW",
+    "location":
+    {
+      "x": 50,
+      "y": 0
+    },
+    "yaw": 0
+  },
+  {
+    "model": "NREL 5MW",
+    "location":
+    {
+      "x": 500,
+      "y": 2000
+    },
+    "yaw": 0
+  }
+]
