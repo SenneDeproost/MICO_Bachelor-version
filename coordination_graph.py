@@ -67,14 +67,9 @@ def qVal(agent, action, cg):
 
     for OUT in outs:
         valRules = cg[agent][OUT[1]]['valRules']
-        result += sum(valRules[action]) / 2
+        result += sum(valRules[action, :]) / 2
 
     return result
-
-
-
-
-
 
 
 # Discounted sum for the involvement of two agents
@@ -98,7 +93,7 @@ def discountedSum(edge, actions, rewards, oja, cg):
 #    production2 = productions[0, :][action2]
 
     optiQ1 = qVal(agent1, int(np.argmax(productions[action1])), cg)
-    optiQ2 = qVal(agent2, oja[agent2 - 1], cg)
+    optiQ2 = qVal(agent2, int(np.argmax(productions[action1])), cg)
 
     localQ1 = qVal(agent1, action1, cg)
     localQ2 = qVal(agent2, action2, cg)
@@ -118,7 +113,7 @@ def discountedSum(edge, actions, rewards, oja, cg):
     cg.node[agent2]['qFunction'][action2][action1] = updatedLocalQ2
 
     #summ = updatedLocalQ1 + updatedLocalQ2
-    res = g.discount*updatedLocalQ1
+    res = g.discount*(updatedLocalQ1 + updatedLocalQ2)
     res2 = g.discount*production1
 
     return res
@@ -234,8 +229,8 @@ def findOJA(cg, nActions):
 
     result = []
 
-    result.append(np.argmax(local[-1]))
 
+    result.append(np.argmax(local[-1]))
     for mat in reversed(mats):
 	       result.append(np.argmax(mat[:, result[-1]]))
 

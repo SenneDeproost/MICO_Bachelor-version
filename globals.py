@@ -6,7 +6,7 @@ import time
 gamma = 0.8
 learningRate = 0.9
 discount = 0.1
-epsilon = 1
+epsilon = 0
 
 step = 2
 nActions = 3 # Don't forget about 0
@@ -20,7 +20,6 @@ def actionIndex(action):
 def indexAction(index):
     normalized = index*step
     return normalized - step * ((nActions - 1) / 2)
-
 
 
 def printStat(message):
