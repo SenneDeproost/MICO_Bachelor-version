@@ -127,12 +127,17 @@ wind = {"angle": 0, "speed": 8.1}
 res = []
 
 actions = [-15, -10, -5, 0, 5, 10, 15]
+#actions = [1, 2]
 
 for action1 in actions:
+    first = []
     for action2 in actions:
+        second = []
         for action3 in actions:
-            result = calcProduction(wind, [action1, action2, action3])
-            res.append(result.tolist())
+            result = calcProduction(wind, [action1, action2, action3]).tolist()
             print ([action1, action2, action3], result)
+            second.append(result)
+        first.append(second)
+    res.append(first)
 
 print res

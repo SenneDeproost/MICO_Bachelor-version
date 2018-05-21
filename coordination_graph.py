@@ -103,14 +103,15 @@ def discountedSum(edge, actions, rewards, oja, cg):
     print "production: " + str(production1)
     print "optiQ: " + str(optiQ1)
     print "localQ: " + str(localQ1)
-    print "discount: " + str(g.gamma*optiQ1 - localQ1)
+    print "div of Q1s: " + str(g.gamma*optiQ1 - localQ1)
+    print "div of Q2s: " + str(g.gamma*optiQ2 - localQ2)
 
     updatedLocalQ1 = production1 + g.gamma*optiQ1 - localQ1
     updatedLocalQ2 = production2 + g.gamma*optiQ2 - localQ2
 
     # Assign new found Q's
-    cg.node[agent1]['qFunction'][action1][action2] = updatedLocalQ1
-    cg.node[agent2]['qFunction'][action2][action1] = updatedLocalQ2
+    #cg.node[agent1]['qFunction'][action1][action2] = updatedLocalQ1
+    #cg.node[agent2]['qFunction'][action2][action1] = updatedLocalQ2
 
     #summ = updatedLocalQ1 + updatedLocalQ2
     res = g.discount*(updatedLocalQ1 + updatedLocalQ2)
@@ -219,6 +220,35 @@ def findOJA(cg, nActions):
 
     mats = [cg[1][2]['valRules']]
     mats.append(cg[2][3]['valRules'])
+
+    for mat in mats:
+	       res = []
+	       mat = np.array(mat) + local[-1]
+	       for row in mat:
+		      res.append(np.max(row))
+	       local.append(res)
+
+    result = []
+
+
+    result.append(np.argmax(local[-1]))
+    for mat in reversed(mats):
+	       result.append(np.argmax(mat[:, result[-1]]))
+
+    #result = list(reversed(result))
+    print "HAHAHAHAHAHA"
+    print ""
+    print map(lambda x: g.indexAction(x), result)
+    print ""
+    print "HAHAHAHAHAHA"
+
+    return result
+
+def findOJAProd(cg, nActions):
+    local = [np.zeros(nActions)]
+
+    mats = [cg[1][2]['productions']]
+    mats.append(cg[2][3]['productions'])
 
     for mat in mats:
 	       res = []
