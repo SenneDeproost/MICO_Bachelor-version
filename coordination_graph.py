@@ -236,11 +236,6 @@ def findOJA(cg, nActions):
 	       result.append(np.argmax(mat[:, result[-1]]))
 
     #result = list(reversed(result))
-    print "HAHAHAHAHAHA"
-    print ""
-    print map(lambda x: g.indexAction(x), result)
-    print ""
-    print "HAHAHAHAHAHA"
 
     return result
 

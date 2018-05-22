@@ -115,7 +115,7 @@ def MICO_wind(config, wind):
     #    powerProductions = np.array([500 + np.random.normal (0, 0.1), 500 + np.random.normal(0, 0.1), 500 + np.random.normal(0, 0.1)])
         #powerProductions = np.array([500, 500, 500])
         powerProductions = preCalcs[jointAction[0]][jointAction[1]][jointAction[2]]
-        #powerProductions = map(lambda x: x + np.random.normal (0, 0.1), powerProductions)
+        powerProductions = map(lambda x: x + np.random.normal (0, 0.1), powerProductions)
         powerProductions = np.array(powerProductions)
 
 

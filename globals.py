@@ -8,8 +8,8 @@ learningRate = 0.9
 discount = 0.9
 epsilon = 0.9
 
-step = 2
-nActions = 3 # Don't forget about 0
+step = 5
+nActions = 7 # Don't forget about 0
 
 logName = str(time.time()) + ".log"
 

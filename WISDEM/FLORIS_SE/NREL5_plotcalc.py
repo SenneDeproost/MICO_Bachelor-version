@@ -117,8 +117,8 @@ def calcProduction(wind, par):
 
     myFloris.run()
     baselinePower = np.sum(myFloris.floris_power_0.wt_power)
-    return myFloris.floris_power_0.wt_power
-    #return baselinePower
+    #return myFloris.floris_power_0.wt_power
+    return baselinePower
 
 #print calcProduction(wind, [a, b, c, d])
 #print calcProduction(wind, turs)
@@ -129,15 +129,17 @@ res = []
 actions = [-15, -10, -5, 0, 5, 10, 15]
 #actions = [1, 2]
 
-for action1 in actions:
-    first = []
-    for action2 in actions:
-        second = []
-        for action3 in actions:
-            result = calcProduction(wind, [action1, action2, action3]).tolist()
-            print ([action1, action2, action3], result)
-            second.append(result)
-        first.append(second)
-    res.append(first)
+print calcProduction(wind, [-15, -15, -5])
 
-print res
+#for action1 in actions:
+#    first = []
+#    for action2 in actions:
+#        second = []
+#        for action3 in actions:
+#            result = calcProduction(wind, [action1, action2, action3]).tolist()
+#            print ([action1, action2, action3], result)
+#            second.append(result)
+#        first.append(second)
+#    res.append(first)
+
+#print res
