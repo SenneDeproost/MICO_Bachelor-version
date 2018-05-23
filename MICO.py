@@ -38,7 +38,7 @@ def MICO_wind(config, wind):
     infra = i.loadInfrastructureDB(config)
 
     nTurbines = len(infra)
-    nEpisodes = 500000
+    nEpisodes = 50000
 
     CG = cg.createCG(infra, g.nActions, wind)
 
@@ -73,9 +73,9 @@ def MICO_wind(config, wind):
         #    jointAction = np.zeros(nTurbines)
         #    counter = 0
         #    for action in jointAction:
-        #        exploringStep = 1
+        #        exploringStep = 2
         #        rand = r.randint(-exploringStep, exploringStep)
-        #        print rand
+                #print rand
         #        if OJA[counter] + rand < 0:
         #            jointAction[counter] = OJA[counter] + abs(rand)
         #        elif OJA[counter] + rand > (g.nActions - 1):
@@ -115,7 +115,7 @@ def MICO_wind(config, wind):
     #    powerProductions = np.array([500 + np.random.normal (0, 0.1), 500 + np.random.normal(0, 0.1), 500 + np.random.normal(0, 0.1)])
         #powerProductions = np.array([500, 500, 500])
         powerProductions = preCalcs[jointAction[0]][jointAction[1]][jointAction[2]]
-        powerProductions = map(lambda x: x + np.random.normal (0, 0.1), powerProductions)
+        #powerProductions = map(lambda x: x + np.random.normal (0, 5), powerProductions)
         powerProductions = np.array(powerProductions)
 
 
@@ -136,8 +136,8 @@ def MICO_wind(config, wind):
             CG[From][To]['productions'][actionTurbine1][actionTurbine2] = powerProductions[turbine1['id'] - 1] + powerProductions[turbine2['id'] - 1]
 
             # Update valRules
-            print "PRODS: "
-            print CG[From][To]['productions']
+        #    print "PRODS: "
+        #    print CG[From][To]['productions']
             discSum = cg.discountedSum(edge, [jointAction[From - 1], jointAction[To - 1]], powerProductions, OJA, CG)
             valRules = CG[edge[0]][edge[1]]['valRules']
 
@@ -147,8 +147,8 @@ def MICO_wind(config, wind):
             adjustedProduction = valRules[normalizedFrom][normalizedTo] + discSum
             valRules[normalizedFrom][normalizedTo] = adjustedProduction
 
-            print powerProductions
-            print valRules
+        #    print powerProductions
+        #    print valRules
 
 
             data = [episode]
@@ -165,8 +165,8 @@ def MICO_wind(config, wind):
 
         g.printStat("       Total power production: " + str(powerProductions.sum()))
 
-        print totalMax
-        print "OJA: " + str(OJA)
+        #print totalMax
+        #print "OJA: " + str(OJA)
 
     g.printStat("Done!")
 

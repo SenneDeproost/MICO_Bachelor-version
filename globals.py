@@ -3,10 +3,10 @@ import time
 #commands = json.load(open("commands.json"))
 #global_vars = json.load(open("variables.json"))
 
-gamma = 0.999
-learningRate = 0.9
-discount = 0.9
-epsilon = 0.9
+gamma = 0
+learningRate = 0.95
+discount = 0.99
+epsilon = 0.1
 
 step = 5
 nActions = 7 # Don't forget about 0
@@ -23,7 +23,8 @@ def indexAction(index):
 
 
 def printStat(message):
-    print("[*] " + message)
+    5
+    #print("[*] " + message)
     #file = open("logs/" + logName, 'a')
     #file.write("[*] " + message + "\n")
     #file.close()

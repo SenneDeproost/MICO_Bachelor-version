@@ -4,6 +4,8 @@
 
 import numpy as np
 
+import simplejson
+
 #import matplotlib as mpl
 #from matplotlib import pyplot as plt
 
@@ -72,8 +74,8 @@ def calcProduction(wind, par):
 
 
 
-    turbineX = [0, 400, 800]
-    turbineY = [0, 0, 0]
+    turbineX = [665, 590, 520, 516, 452, 250]
+    turbineY = [24, 120, 232, 343, 479, 619]
     turbineYaw = par
 
 
@@ -126,20 +128,32 @@ wind = {"angle": 0, "speed": 8.1}
 
 res = []
 
-actions = [-15, -10, -5, 0, 5, 10, 15]
-#actions = [1, 2]
+actions = [-30, -25, -20, -15, -10, -5, 0, 5, 10, 15, 20, 25, 30]
+actions = [1, 2]
 
-print calcProduction(wind, [-15, -15, -5])
+#print calcProduction(wind, [0, 0, 0])
 
-#for action1 in actions:
-#    first = []
-#    for action2 in actions:
-#        second = []
-#        for action3 in actions:
-#            result = calcProduction(wind, [action1, action2, action3]).tolist()
-#            print ([action1, action2, action3], result)
-#            second.append(result)
-#        first.append(second)
-#    res.append(first)
+for action1 in actions:
+    first = []
+    for action2 in actions:
+        second = []
+        for action3 in actions:
+            third = []
+            for action4 in actions:
+                fourth = []
+                for action5 in actions:
+                    fifth = []
+                    for action6 in actions:
+                        result = calcProduction(wind, [action1, action2, action3, action4, action5, action6]).tolist()
+                        print ([action1, action2, action3, action4, action5, action6], result)
+                        fifth.append(result)
+                    fourth.append(fifth)
+                third.append(fourth)
+            second.append(third)
+        first.append(second)
+    res.append(first)
 
-#print res
+print res
+f = open('output.txt', 'w')
+simplejson.dump(res, f)
+f.close()

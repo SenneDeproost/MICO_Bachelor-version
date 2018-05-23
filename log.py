@@ -13,7 +13,7 @@ header = [[g.gamma, g.learningRate, g.discount, g.epsilon, g.step, g.nActions]]
 def createCSV():
 	with open(fileName, 'w+') as File:
 		writer = c.writer(File)
-		writer.writerows(header)
+		#writer.writerows(header)
 
 def appendCSV(row):
 	with open(fileName, 'a') as File:

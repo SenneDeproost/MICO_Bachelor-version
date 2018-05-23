@@ -84,7 +84,6 @@ def discountedSum(edge, actions, rewards, oja, cg):
     production1 = rewards[agent1 - 1]
     production2 = rewards[agent2 - 1]
 
-    print max(productions[action1])
 
     production = productions[action1]
     valRules = cg[agent1][agent2]['valRules']
@@ -92,19 +91,20 @@ def discountedSum(edge, actions, rewards, oja, cg):
 #    production1 = productions[:, 0][action1]
 #    production2 = productions[0, :][action2]
 
-    optiQ1 = qVal(agent1, int(np.argmax(productions[action1])), cg)
-    optiQ2 = qVal(agent2, int(np.argmax(productions[action1])), cg)
+    optiQ1 = qVal(agent1, int(np.argmax(valRules[action1])), cg)
+    optiQ2 = qVal(agent2, int(np.argmax(valRules[action2])), cg)
 
     localQ1 = qVal(agent1, action1, cg)
     localQ2 = qVal(agent2, action2, cg)
 
-    print""
-    print "QVAL"
-    print "production: " + str(production1)
-    print "optiQ: " + str(optiQ1)
-    print "localQ: " + str(localQ1)
-    print "div of Q1s: " + str(g.gamma*optiQ1 - localQ1)
-    print "div of Q2s: " + str(g.gamma*optiQ2 - localQ2)
+#    print""
+#    print "QVAL"
+#    print "production: " + str(production1)
+#    print "optiQ: " + str(optiQ1)
+#    print "localQ: " + str(localQ1)
+#    print "div of Q1s: " + str(g.gamma*optiQ1 - localQ1)
+#    print "div of Q2s: " + str(g.gamma*optiQ2 - localQ2)
+
 
     updatedLocalQ1 = production1 + g.gamma*optiQ1 - localQ1
     updatedLocalQ2 = production2 + g.gamma*optiQ2 - localQ2
@@ -116,6 +116,10 @@ def discountedSum(edge, actions, rewards, oja, cg):
     #summ = updatedLocalQ1 + updatedLocalQ2
     res = g.discount*(updatedLocalQ1 + updatedLocalQ2)
     res2 = g.discount*production1
+
+#    print "DISC"
+#    print (edge, actions)
+#    print res
 
     return res
 
