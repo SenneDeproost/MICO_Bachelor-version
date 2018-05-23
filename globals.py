@@ -23,8 +23,7 @@ def indexAction(index):
 
 
 def printStat(message):
-    5
-    #print("[*] " + message)
+    print("[*] " + message)
     #file = open("logs/" + logName, 'a')
     #file.write("[*] " + message + "\n")
     #file.close()

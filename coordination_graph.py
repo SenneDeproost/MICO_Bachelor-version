@@ -15,7 +15,8 @@ def createCG(database, nActions, *parameters):
         g.printStat("   Adding node " + str(entity["id"]) + " to CG")
         cg.add_node(entity["id"], qFunction=np.zeros([nActions, nActions]))
         for other in entities:
-            if dep.dependsOn(entity, other, parameters) and entity["id"] != other["id"]:
+            #if dep.dependsOn(entity, other, parameters) and entity["id"] != other["id"]:
+            if entity["id"] == (other["id"] - 1):
                 cg.add_edge(entity["id"], other["id"], productions=np.zeros([nActions, nActions]), valRules=np.zeros([nActions, nActions])) # Row = cur
     #nx.set_node_attributes(cg, 'qFunction', np.zeros([nActions, nActions]))
     #nx.set_edge_attributes(cg, 'productions', np.zeros([nActions, nActions]))
@@ -224,6 +225,9 @@ def findOJA(cg, nActions):
 
     mats = [cg[1][2]['valRules']]
     mats.append(cg[2][3]['valRules'])
+    mats.append(cg[3][4]['valRules'])
+    mats.append(cg[4][5]['valRules'])
+    mats.append(cg[5][6]['valRules'])
 
     for mat in mats:
 	       res = []
